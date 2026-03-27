@@ -1,0 +1,1 @@
+Admin pieces management view.

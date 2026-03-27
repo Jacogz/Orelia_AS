@@ -1,0 +1,1 @@
+Admin collections management view.
