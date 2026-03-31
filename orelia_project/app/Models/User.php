@@ -5,11 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-use App\Models\Order;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -27,7 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'address',
-        'role'
+        'role',
     ];
 
     /**
@@ -61,18 +59,18 @@ class User extends Authenticatable
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'address' => 'required|string|max:255',
-            'role' => 'required|string|in:client,admin'
+            'role' => 'required|string|in:client,admin',
         ]);
     }
-    
-     public function orders(): HasMany
+
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'client_id');
     }
-    
+
     public function getFullName(): string
     {
-        return $this->name . ' ' . $this->last_name;
+        return $this->name.' '.$this->last_name;
     }
 
     public function isAdmin(): bool

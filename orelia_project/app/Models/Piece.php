@@ -2,22 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
-
-use App\Models\Piece;
-use App\Models\Collection;
-use App\Models\Material;
-use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Piece extends Model
 {
     use HasFactory;
+
     /**
      * PIECE ATTRIBUTES
      * $this->attributes['id'] - int - contains the piece primary key
@@ -35,7 +30,6 @@ class Piece extends Model
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'name',
         'description',
@@ -45,7 +39,7 @@ class Piece extends Model
         'stock',
         'size',
         'weight',
-        'collection_id'
+        'collection_id',
     ];
 
     public static function validate(Request $request): array
@@ -62,7 +56,7 @@ class Piece extends Model
             'collection_id' => 'required|integer|exists:collections,id',
         ]);
     }
-    
+
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class, 'collection_id');
