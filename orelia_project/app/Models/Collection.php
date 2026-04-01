@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -39,6 +39,22 @@ class Collection extends Model
     }
 
     // Getters for related models
+
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+     public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
     public function getPieces(): EloquentCollection
     {
         return $this->pieces;
