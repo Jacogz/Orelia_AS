@@ -13,7 +13,6 @@ class AdminCollectionController extends Controller
     public function index(): View
     {
         $collections = Collection::all();
-
         return view('collections.admin.index', ['collections' => $collections]);
     }
 
@@ -24,9 +23,8 @@ class AdminCollectionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $data = Collection::validate($request);
+       $data = Collection::validate($request);
         Collection::create($data);
-
         return redirect()->route('admin.collections.index')
             ->with('success', 'Collection created successfully.');
     }
@@ -34,16 +32,14 @@ class AdminCollectionController extends Controller
     public function edit(string $id): View
     {
         $collection = Collection::findOrFail($id);
-
         return view('collections.admin.edit', ['collection' => $collection]);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+      public function update(Request $request, string $id): RedirectResponse
     {
         $collection = Collection::findOrFail($id);
         $data = Collection::validate($request);
         $collection->update($data);
-
         return redirect()->route('admin.collections.index')
             ->with('success', 'Collection updated successfully.');
     }
@@ -52,7 +48,6 @@ class AdminCollectionController extends Controller
     {
         $collection = Collection::findOrFail($id);
         $collection->delete();
-
         return redirect()->route('admin.collections.index')
             ->with('success', 'Collection deleted successfully.');
     }
