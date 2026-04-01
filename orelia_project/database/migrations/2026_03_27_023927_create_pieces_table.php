@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pieces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('price');
             $table->string('type');
             $table->string('image_url')->nullable();

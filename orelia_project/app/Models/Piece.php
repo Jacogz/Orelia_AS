@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 
 class Piece extends Model
@@ -72,6 +73,55 @@ class Piece extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function getPrice(): float
+    {
+        return $this->attributes['price'];
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->attributes['image_url'];
+    }
+
+    public function getStock(): int
+    {
+        return $this->attributes['stock'];
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->attributes['size'];
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->attributes['weight'];
+    }
+
+    public function getCollectionId(): int
+    {
+        return $this->attributes['collection_id'];
+    }
     // Getters for related models
 
     public function getCollection(): Collection
