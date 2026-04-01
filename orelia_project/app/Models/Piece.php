@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 
-use App\Models\Piece;
 use App\Models\Collection;
 use App\Models\Material;
 use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -68,9 +66,9 @@ class Piece extends Model
         return $this->belongsTo(Collection::class, 'collection_id');
     }
 
-    public function materials(): HasMany
+    public function materials(): BelongsToMany
     {
-        return $this->hasMany(Material::class);
+        return $this->belongsToMany(Material::class);
     }
 
     public function orderItems(): HasMany

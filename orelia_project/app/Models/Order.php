@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 use App\Models\OrderItem;
-use App\models\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class Order extends Model
@@ -56,7 +56,7 @@ class Order extends Model
     // Getters for related models
     public function getOrderItems(): EloquentCollection
     {
-        return $this->order_items;
+        return $this->orderItems;
     }
 
     public function getClient(): User

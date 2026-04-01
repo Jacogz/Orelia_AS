@@ -17,6 +17,10 @@ return new class extends Migration
             $table->text('description');
             $table->integer('price');
             $table->string('type');
+            $table->string('image_url')->nullable();
+            $table->unsignedInteger('stock')->default(0);
+            $table->string('size')->nullable();
+            $table->decimal('weight', 8, 2)->nullable()->unsigned();
             $table->unsignedBigInteger('collection_id');
             $table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
             $table->timestamps();

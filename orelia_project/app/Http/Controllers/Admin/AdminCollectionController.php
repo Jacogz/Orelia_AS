@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-USE App\Models\Collection;
+use App\Models\Collection;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

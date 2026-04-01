@@ -12,6 +12,7 @@ class PieceController extends Controller
 {
     public function index(): View
     {
-        return view('pieces.user.index');
+        $Pieces = Piece::all();
+        return view('pieces.user.index', ['Pieces' => $Pieces]);    
     }
 }

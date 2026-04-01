@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 use App\Models\Piece;
 use Illuminate\Database\Eloquent\Relations\HasMany;

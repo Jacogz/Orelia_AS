@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Iluminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+
 use App\Http\Controllers\Controller;
 use App\Models\Piece;
 

@@ -12,6 +12,7 @@ class CollectionController extends Controller
 {
     public function index(): View
     {
-        return view('collections.user.index');
+        $collections = Collection::all();
+        return view('collections.user.index', ['collections' => $collections]);
     }
 }

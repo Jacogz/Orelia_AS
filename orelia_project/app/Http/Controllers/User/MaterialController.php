@@ -12,6 +12,7 @@ class MaterialController extends Controller
 {
     public function index(): View
     {
-        return view('materials.user.index');
+        $materials = Material::all();
+        return view('materials.user.index', ['materials' => $materials]);
     }
 }

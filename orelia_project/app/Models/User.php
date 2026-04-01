@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Http\Request;
 
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -90,7 +91,7 @@ class User extends Authenticatable
         return $this->role === null;
     }
 
-    public function getOrders(): HasMany
+    public function getOrders(): EloquentCollection
     {
         return $this->orders;
     }
