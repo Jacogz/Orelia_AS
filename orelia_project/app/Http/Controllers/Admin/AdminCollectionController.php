@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Collection;
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AdminCollectionController extends Controller
 {
@@ -22,18 +19,12 @@ class AdminCollectionController extends Controller
         return view('collections.admin.create');
     }
 
-    public function store(Request $request): View|RedirectResponse
-    {
-
-    }
+    public function store(Request $request): View|RedirectResponse {}
 
     public function edit(string $id): View
     {
         return view('collections.admin.edit');
     }
 
-    public function update(Request $request, string $id): View|RedirectResponse
-    {
-
-    }
+    public function update(Request $request, string $id): View|RedirectResponse {}
 }

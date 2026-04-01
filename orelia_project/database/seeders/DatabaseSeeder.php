@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
             'address' => '456 User St',
-            'role' => 'user',
+            'role' => 'client',
             'password' => 'userpassword',
         ]);
 

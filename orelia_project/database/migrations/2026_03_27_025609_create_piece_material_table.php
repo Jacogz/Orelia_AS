@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('piece_material', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('piece_id');
-            $table->unsignedBigInteger('material_id');
+            $table->foreignId('piece_id')->constrained()->onDelete('cascade');
+            $table->foreignId('material_id')->constrained()->onDelete('cascade');
             $table->unique(['piece_id', 'material_id']);
-            $table->foreign('piece_id')->references('id')->on('pieces')->onDelete('cascade');
-            $table->foreign('material_id')->references('id')->on('materials')->onDelete('cascade');
             $table->timestamps();
         });
     }

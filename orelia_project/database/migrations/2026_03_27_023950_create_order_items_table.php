@@ -16,10 +16,8 @@ return new class extends Migration
             $table->integer('unit_price')->unsigned();
             $table->integer('quantity')->unsigned();
             $table->integer('subtotal')->unsigned();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('piece_id');
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('piece_id')->references('id')->on('pieces')->onDelete('restrict');
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('piece_id')->constrained()->onDelete('restrict');
             $table->timestamps();
         });
     }
