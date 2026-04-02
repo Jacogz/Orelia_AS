@@ -45,7 +45,33 @@ class Material extends Model
         return $this->belongsToMany(Piece::class);
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function getDescription(): string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function getColor(): string
+    {
+        return $this->attributes['color'];
+    }
+
     // Getters for related models
+
     public function getPieces(): EloquentCollection
     {
         return $this->pieces;
