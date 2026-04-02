@@ -10,8 +10,8 @@ class PieceController extends Controller
 {
     public function index(): View
     {
-        $Pieces = Piece::all();
+        $pieces = Piece::with('collection')->get();
 
-        return view('pieces.user.index', ['Pieces' => $Pieces]);
+        return view('pieces.user.index', ['pieces' => $pieces]);
     }
 }
