@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-
-use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
 
 class OrderItem extends Model
 {
@@ -21,13 +19,12 @@ class OrderItem extends Model
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'unit_price',
         'quantity',
         'subtotal',
         'order_id',
-        'piece_id'
+        'piece_id',
     ];
 
     public static function validate(Request $request): array
@@ -56,6 +53,7 @@ class OrderItem extends Model
     {
         return $this->order;
     }
+
     public function getPiece(): Piece
     {
         return $this->piece;
