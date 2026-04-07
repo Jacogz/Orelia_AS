@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}" />
-    <title>@yield('title', 'Material Workshop')</title>
+    <title>@yield('title', 'Orelia')</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark py-4">
@@ -17,23 +17,27 @@
                 <a href="{{ route('materials.index') }}">Materials</a>
                 <a href="{{ route('collections.index') }}">Collections</a>
                 <a href="{{ route('cart.index') }}">Cart</a>
-                <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
-                <a href="{{ route('admin.pieces.index') }}">Admin Pieces</a>
-                <a href="{{ route('admin.materials.index') }}">Admin Materials</a>
-                <a href="{{ route('admin.collections.index') }}">Admin Collections</a>
 
-              <div class="vr bg-white mx-2 d-none d-lg-block"></div> 
-                @guest 
-                  <a class="nav-link active" href="{{ route('login') }}">Login</a> 
-                  <a class="nav-link active" href="{{ route('register') }}">Register</a> 
-                    @else 
-                  <form id="logout" action="{{ route('logout') }}" method="POST"> 
-                    <a role="button" class="nav-link active" 
-                       onclick="document.getElementById('logout').submit();">Logout</a> 
-                    @csrf 
-                  </form> 
-                @endguest 
-              </div> 
+                @auth
+                    @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                        <a href="{{ route('admin.pieces.index') }}">Admin Pieces</a>
+                        <a href="{{ route('admin.materials.index') }}">Admin Materials</a>
+                        <a href="{{ route('admin.collections.index') }}">Admin Collections</a>
+                    @endif
+                @endauth
+
+                <div class="vr bg-white mx-2 d-none d-lg-block"></div>
+                @guest
+                    <a class="nav-link active" href="{{ route('login') }}">Login</a>
+                    <a class="nav-link active" href="{{ route('register') }}">Register</a>
+                @else
+                    <form id="logout" action="{{ route('logout') }}" method="POST">
+                        <a role="button" class="nav-link active"
+                           onclick="document.getElementById('logout').submit();">Logout</a>
+                        @csrf
+                    </form>
+                @endguest
             </div>
         </div>
     </nav>

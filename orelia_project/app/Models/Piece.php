@@ -2,22 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
-
-use App\Models\Piece;
-use App\Models\Collection;
-use App\Models\Material;
-use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Piece extends Model
 {
     use HasFactory;
+
     /**
      * PIECE ATTRIBUTES
      * $this->attributes['id'] - int - contains the piece primary key
@@ -35,7 +31,6 @@ class Piece extends Model
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'name',
         'description',
@@ -45,7 +40,7 @@ class Piece extends Model
         'stock',
         'size',
         'weight',
-        'collection_id'
+        'collection_id',
     ];
 
     public static function validate(Request $request): array
@@ -62,15 +57,15 @@ class Piece extends Model
             'collection_id' => 'required|integer|exists:collections,id',
         ]);
     }
-    
+
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class, 'collection_id');
     }
 
-    public function materials(): HasMany
+    public function materials(): BelongsToMany
     {
-        return $this->hasMany(Material::class);
+        return $this->belongsToMany(Material::class);
     }
 
     public function orderItems(): HasMany
@@ -78,6 +73,55 @@ class Piece extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function getPrice(): float
+    {
+        return $this->attributes['price'];
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->attributes['image_url'];
+    }
+
+    public function getStock(): int
+    {
+        return $this->attributes['stock'];
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->attributes['size'];
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->attributes['weight'];
+    }
+
+    public function getCollectionId(): int
+    {
+        return $this->attributes['collection_id'];
+    }
     // Getters for related models
 
     public function getCollection(): Collection

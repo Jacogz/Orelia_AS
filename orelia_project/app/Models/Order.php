@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-
-use App\Models\OrderItem;
-use App\models\User;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Order extends Model
 {
@@ -23,13 +20,12 @@ class Order extends Model
      * $this->attributes['client_id'] - int - contains the order client ID
      * $this->attributes['order_items'] - OrderItem[] - contains the order items list
      */
-
     protected $fillable = [
         'client_id',
         'total',
         'status',
         'payment_method',
-        'payment_status'
+        'payment_status',
     ];
 
     public static function validate(Request $request): array
@@ -56,7 +52,7 @@ class Order extends Model
     // Getters for related models
     public function getOrderItems(): EloquentCollection
     {
-        return $this->order_items;
+        return $this->orderItems;
     }
 
     public function getClient(): User

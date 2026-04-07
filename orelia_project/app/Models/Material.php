@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
-
-use App\Models\Material;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Http\Request;
 
 class Material extends Model
 {
     use HasFactory;
+
     /**
      * MATERIAL ATTRIBUTES
      * $this->attributes['id'] - int - contains the material primary key
@@ -24,12 +23,11 @@ class Material extends Model
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'name',
         'type',
         'description',
-        'color'
+        'color',
     ];
 
     public static function validate(Request $request): array
@@ -47,7 +45,33 @@ class Material extends Model
         return $this->belongsToMany(Piece::class);
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function getDescription(): string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function getColor(): string
+    {
+        return $this->attributes['color'];
+    }
+
     // Getters for related models
+
     public function getPieces(): EloquentCollection
     {
         return $this->pieces;

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MaterialFactory extends Factory
@@ -11,6 +12,11 @@ class MaterialFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'type' => $this->faker->randomElement(['ring', 'necklace', 'bracelet', 'earring']),
+            'stock' => $this->faker->numberBetween(0, 100),
+            'collection_id' => Collection::factory(),
+
         ];
     }
 }
