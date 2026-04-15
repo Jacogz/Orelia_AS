@@ -32,7 +32,7 @@ class AdminCollectionController extends Controller
     {
         try {
             $validationData = Collection::validate($request);
-            $collection = new Collection();
+            $collection = new Collection;
             $collection->fill($validationData);
             $collection->save();
 

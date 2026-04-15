@@ -34,7 +34,6 @@ class Piece extends Model
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'name',
         'description',
@@ -174,7 +173,7 @@ class Piece extends Model
 
     // Getters for related models
 
-    public function getCollection(): \App\Models\Collection
+    public function getCollection(): Collection
     {
         return $this->collection;
     }

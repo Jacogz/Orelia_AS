@@ -35,7 +35,7 @@ class AdminPieceController extends Controller
     {
         try {
             $validationData = Piece::validate($request);
-            $piece = new Piece();
+            $piece = new Piece;
             $piece->fill($validationData);
             $piece->save();
 

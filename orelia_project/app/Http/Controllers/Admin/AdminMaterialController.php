@@ -32,7 +32,7 @@ class AdminMaterialController extends Controller
     {
         try {
             $validationData = Material::validate($request);
-            $material = new Material();
+            $material = new Material;
             $material->fill($validationData);
             $material->save();
 

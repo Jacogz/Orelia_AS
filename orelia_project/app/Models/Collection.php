@@ -21,7 +21,6 @@ class Collection extends Model
      * $this->attributes['created_at'] - timestamp - contains the collection creation timestamp
      * $this->attributes['updated_at'] - timestamp - contains the collection update timestamp
      */
-
     protected $fillable = [
         'name',
         'description',

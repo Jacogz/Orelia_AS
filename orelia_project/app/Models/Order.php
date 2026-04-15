@@ -21,7 +21,6 @@ class Order extends Model
      * $this->order_items - OrderItem[] - contains the order items list
      * $this->client - User - contains the order client object
      */
-
     protected $fillable = [
         'client_id',
         'total',
