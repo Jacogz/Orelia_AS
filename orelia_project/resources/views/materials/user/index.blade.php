@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Materials')
+@section('title', $viewData['title'])
 
 @section('content')
     <div class="mb-4">
-        <h2>Our Materials</h2>
-        <p class="text-muted">Discover the finest materials used in our jewelry</p>
+        <h2>{{ $viewData['title'] }}</h2>
+        <p class="text-muted">{{ $viewData['subtitle'] }}</p>
     </div>
 
-    @if($materials->isEmpty())
-        <div class="alert alert-info">No materials available at the moment.</div>
+    @if($viewData['materials']->isEmpty())
+        <div class="alert alert-info">{{ __('materials.empty_user') }}</div>
     @else
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach($materials as $material)
+            @foreach($viewData['materials'] as $material)
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">

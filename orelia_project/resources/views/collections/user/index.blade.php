@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Collections')
+@section('title', $viewData['title'])
 
 @section('content')
     <div class="mb-4">
-        <h2>Our Collections</h2>
-        <p class="text-muted">Explore our exclusive jewelry collections</p>
+        <h2>{{ $viewData['title'] }}</h2>
+        <p class="text-muted">{{ $viewData['subtitle'] }}</p>
     </div>
 
-    @if($collections->isEmpty())
-        <div class="alert alert-info">No collections available at the moment.</div>
+    @if($viewData['collections']->isEmpty())
+        <div class="alert alert-info">{{ __('collections.empty_user') }}</div>
     @else
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach($collections as $collection)
+            @foreach($viewData['collections'] as $collection)
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
@@ -20,8 +20,8 @@
                             <p class="card-text text-muted">{{ $collection->getDescription() }}</p>
                         </div>
                         <div class="card-footer bg-transparent">
-                            <a href="{{ route('pieces.index') }}" class="btn btn-outline-dark btn-sm">
-                                Explore Collection
+                            <a href="{{ route('collections.show', $collection->getId()) }}" class="btn btn-outline-dark btn-sm">
+                                {{ __('collections.explore') }}
                             </a>
                         </div>
                     </div>
