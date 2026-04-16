@@ -26,6 +26,9 @@ return [
     'error' => 'An error occurred. Please try again.',
     'empty' => 'No collections found.',
     'empty_user' => 'No collections available at the moment.',
+    'no_pieces' => 'No pieces found in this collection.',
+    'pieces' => 'Pieces in this collection',
+    'collection_not_found' => 'Collection not found.',
 
     // Subtitle
     'subtitle' => 'Explore our exclusive jewelry collections',

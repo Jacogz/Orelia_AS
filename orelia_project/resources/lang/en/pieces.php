@@ -17,6 +17,7 @@ return [
     'weight' => 'Weight',
     'collection' => 'Collection',
     'select_collection' => 'Select a collection',
+    'materials' => 'Materials',
 
     // Actions
     'save' => 'Save',
@@ -25,6 +26,7 @@ return [
     'edit' => 'Edit',
     'delete' => 'Delete',
     'create' => 'Create Piece',
+    'view_detail' => 'View detail',
 
     // Messages
     'created' => 'Piece created successfully.',
