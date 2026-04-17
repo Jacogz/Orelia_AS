@@ -19,7 +19,7 @@ class AdminPieceController extends Controller
         $viewData['title'] = __('pieces.title');
         $viewData['pieces'] = $pieces;
 
-        return view('pieces.admin.index', ['viewData' => $viewData]);
+        return view('admin.pieces.index')->with('viewData', $viewData);
     }
 
     public function create(): View
@@ -29,7 +29,7 @@ class AdminPieceController extends Controller
         $viewData['title'] = __('pieces.create_title');
         $viewData['collections'] = $collections;
 
-        return view('pieces.admin.create', ['viewData' => $viewData]);
+        return view('admin.pieces.create')->with('viewData', $viewData);
     }
 
     public function store(Request $request): RedirectResponse
@@ -57,7 +57,7 @@ class AdminPieceController extends Controller
         $viewData['piece'] = $piece;
         $viewData['collections'] = $collections;
 
-        return view('pieces.admin.edit', ['viewData' => $viewData]);
+        return view('admin.pieces.edit')->with('viewData', $viewData);
     }
 
     public function update(Request $request, string $id): RedirectResponse

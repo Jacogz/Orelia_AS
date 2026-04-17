@@ -27,13 +27,14 @@ class Piece extends Model
      * $this->attributes['stock'] - int - contains the piece stock
      * $this->attributes['size'] - string - contains the piece size
      * $this->attributes['weight'] - float - contains the piece weight
+     * $this->attributes['created_at'] - datetime - contains the creation date
+     * $this->attributes['updated_at'] - datetime - contains the update date
      * $this->attributes['collection_id'] - int - contains the piece collection foreign key
      * $this->collection - Collection - contains the piece collection object
      * $this->materials - Material[] - contains the piece materials list
      * $this->order_items - OrderItem[] - contains the piece order items list
-     * $this->attributes['created_at'] - datetime - contains the creation date
-     * $this->attributes['updated_at'] - datetime - contains the update date
      */
+    //Ordenar atributos primitivos->relaciones y no primitivos, conservar orden en métodos
     protected $fillable = [
         'name',
         'description',

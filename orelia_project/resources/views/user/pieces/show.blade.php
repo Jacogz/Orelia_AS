@@ -47,6 +47,10 @@
 
                 @if($viewData['piece']->getStock() > 0)
                     <p class="text-success small">{{ __('pieces.in_stock') }} ({{ $viewData['piece']->getStock() }})</p>
+                    <form action="{{ route('cart.add', $viewData['piece']->getId()) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-dark mt-2">Add to cart</button>
+                    </form>
                 @else
                     <p class="text-danger small">{{ __('pieces.out_of_stock') }}</p>
                 @endif

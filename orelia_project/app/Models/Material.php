@@ -19,9 +19,9 @@ class Material extends Model
      * $this->attributes['type'] - string - contains the material type
      * $this->attributes['description'] - string - contains the material description
      * $this->attributes['color'] - string - contains the material color
-     * $this->pieces - Piece[] - contains the material pieces list
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
+     * $this->pieces - Piece[] - contains the material pieces list
      */
     protected $fillable = [
         'name',

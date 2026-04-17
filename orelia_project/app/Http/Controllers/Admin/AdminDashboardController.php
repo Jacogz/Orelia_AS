@@ -46,6 +46,6 @@ class AdminDashboardController extends Controller
         $viewData['recentOrders'] = $recentOrders;
         $viewData['topPieces'] = $topPieces;
 
-        return view('admin.dashboard', ['viewData' => $viewData]);
+        return view('admin.dashboard')->with('viewData', $viewData);
     }
 }

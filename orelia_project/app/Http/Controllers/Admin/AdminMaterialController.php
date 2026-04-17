@@ -18,7 +18,7 @@ class AdminMaterialController extends Controller
         $viewData['title'] = __('materials.title');
         $viewData['materials'] = $materials;
 
-        return view('materials.admin.index', ['viewData' => $viewData]);
+        return view('admin.materials.index')->with('viewData', $viewData);
     }
 
     public function create(): View
@@ -26,7 +26,7 @@ class AdminMaterialController extends Controller
         $viewData = [];
         $viewData['title'] = __('materials.create_title');
 
-        return view('materials.admin.create', ['viewData' => $viewData]);
+        return view('admin.materials.create')->with('viewData', $viewData);
     }
 
     public function store(Request $request): RedirectResponse
@@ -52,7 +52,7 @@ class AdminMaterialController extends Controller
         $viewData['title'] = __('materials.edit_title');
         $viewData['material'] = $material;
 
-        return view('materials.admin.edit', ['viewData' => $viewData]);
+        return view('admin.materials.edit')->with('viewData', $viewData);
     }
 
     public function update(Request $request, string $id): RedirectResponse

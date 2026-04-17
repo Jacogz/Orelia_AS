@@ -16,12 +16,12 @@ class OrderItem extends Model
      * $this->attributes['unit_price'] - int - contains the order item unit price
      * $this->attributes['quantity'] - int - contains the order item quantity
      * $this->attributes['subtotal'] - int - contains the order item subtotal
+     * $this->attributes['created_at'] - datetime - contains the creation date
+     * $this->attributes['updated_at'] - datetime - contains the update date
      * $this->attributes['order_id'] - int - contains the order item order foreign key
      * $this->attributes['piece_id'] - int - contains the order item piece foreign key
      * $this->order - Order - contains the order item order object
      * $this->piece - Piece - contains the order item piece object
-     * $this->attributes['created_at'] - datetime - contains the creation date
-     * $this->attributes['updated_at'] - datetime - contains the update date
      */
     protected $fillable = [
         'unit_price',

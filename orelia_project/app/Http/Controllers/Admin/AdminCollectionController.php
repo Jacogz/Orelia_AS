@@ -18,7 +18,7 @@ class AdminCollectionController extends Controller
         $viewData['title'] = __('collections.title');
         $viewData['collections'] = $collections;
 
-        return view('collections.admin.index', ['viewData' => $viewData]);
+        return view('admin.collections.index')->with('viewData', $viewData);
     }
 
     public function create(): View
@@ -26,7 +26,7 @@ class AdminCollectionController extends Controller
         $viewData = [];
         $viewData['title'] = __('collections.create_title');
 
-        return view('collections.admin.create', ['viewData' => $viewData]);
+        return view('admin.collections.create')->with('viewData', $viewData);
     }
 
     public function store(Request $request): RedirectResponse
@@ -52,7 +52,7 @@ class AdminCollectionController extends Controller
         $viewData['title'] = __('collections.edit_title');
         $viewData['collection'] = $collection;
 
-        return view('collections.admin.edit', ['viewData' => $viewData]);
+        return view('admin.collections.edit')->with('viewData', $viewData);
     }
 
     public function update(Request $request, string $id): RedirectResponse

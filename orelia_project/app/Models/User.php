@@ -16,6 +16,19 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * USER ATTRIBUTES
+     * $this->attributes['id'] - int - contains the user primary key
+     * $this->attributes['name'] - string - contains the user name
+     * $this->attributes['email'] - string - contains the user email
+     * $this->attributes['password'] - string - contains the user password
+     * $this->attributes['address'] - string - contains the user address
+     * $this->attributes['role'] - string - contains the user role
+     * $this->attributes['created_at'] - datetime - contains the creation date
+     * $this->attributes['updated_at'] - datetime - contains the update date
+     * $this->orders - Order[] - contains the user orders list
+     */
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

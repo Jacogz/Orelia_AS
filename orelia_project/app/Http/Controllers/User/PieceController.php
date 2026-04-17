@@ -11,6 +11,7 @@ class PieceController extends Controller
 {
     public function index(): View
     {
+        // Sobran por no escribir en db
         try {
             $pieces = Piece::with('collection')->get();
             $viewData = [];
@@ -18,13 +19,13 @@ class PieceController extends Controller
             $viewData['subtitle'] = __('pieces.subtitle');
             $viewData['pieces'] = $pieces;
 
-            return view('pieces.user.index', ['viewData' => $viewData]);
+            return view('user.pieces.index')->with('viewData', $viewData);
         } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('pieces.title');
             $viewData['pieces'] = collect();
 
-            return view('pieces.user.index', ['viewData' => $viewData]);
+            return view('user.pieces.index')->with('viewData', $viewData);
         }
     }
 
@@ -36,13 +37,13 @@ class PieceController extends Controller
             $viewData['title'] = $piece->getName();
             $viewData['piece'] = $piece;
 
-            return view('pieces.user.show', ['viewData' => $viewData]);
+            return view('user.pieces.show')->with('viewData', $viewData);
         } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('pieces.title');
             $viewData['piece'] = null;
 
-            return view('pieces.user.show', ['viewData' => $viewData]);
+            return view('user.pieces.show')->with('viewData', $viewData);
         }
     }
 }

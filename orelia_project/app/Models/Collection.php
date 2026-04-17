@@ -17,10 +17,11 @@ class Collection extends Model
      * $this->attributes['id'] - int - contains the collection primary key
      * $this->attributes['name'] - string - contains the collection name
      * $this->attributes['description'] - string - contains the collection description
-     * $this->pieces - Piece[] - contains the collection pieces list
      * $this->attributes['created_at'] - timestamp - contains the collection creation timestamp
      * $this->attributes['updated_at'] - timestamp - contains the collection update timestamp
+     * $this->pieces - Piece[] - contains the collection pieces list
      */
+    
     protected $fillable = [
         'name',
         'description',

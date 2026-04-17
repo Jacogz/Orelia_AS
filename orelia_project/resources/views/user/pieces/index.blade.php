@@ -25,9 +25,13 @@
                                 <span class="badge bg-secondary">{{ $piece->getType() }}</span>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent">
+                        <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
                             @if($piece->getStock() > 0)
                                 <span class="text-success small">{{ __('pieces.in_stock') }} ({{ $piece->getStock() }})</span>
+                                <form action="{{ route('cart.add', $piece->getId()) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-dark btn-sm">Add to cart</button>
+                                </form>
                             @else
                                 <span class="text-danger small">{{ __('pieces.out_of_stock') }}</span>
                             @endif

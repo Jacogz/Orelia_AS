@@ -18,13 +18,13 @@ class CollectionController extends Controller
             $viewData['subtitle'] = __('collections.subtitle');
             $viewData['collections'] = $collections;
 
-            return view('collections.user.index', ['viewData' => $viewData]);
+            return view('user.collections.index')->with('viewData', $viewData);
         } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('collections.title');
             $viewData['collections'] = collect();
 
-            return view('collections.user.index', ['viewData' => $viewData]);
+            return view('user.collections.index')->with('viewData', $viewData);
         }
     }
 
@@ -37,14 +37,14 @@ class CollectionController extends Controller
             $viewData['collection'] = $collection;
             $viewData['pieces'] = $collection->getPieces();
 
-            return view('collections.user.show', ['viewData' => $viewData]);
+            return view('user.collections.show')->with('viewData', $viewData);
         } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('collections.title');
             $viewData['collection'] = null;
             $viewData['pieces'] = collect();
 
-            return view('collections.user.show', ['viewData' => $viewData]);
+            return view('user.collections.show')->with('viewData', $viewData);
         }
     }
 }

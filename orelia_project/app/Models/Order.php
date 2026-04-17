@@ -19,12 +19,14 @@ class Order extends Model
      * $this->attributes['status'] - string - contains the order status
      * $this->attributes['payment_method'] - string - contains the payment method
      * $this->attributes['payment_status'] - string - contains the payment status
-     * $this->attributes['client_id'] - int - contains the order client ID
+     * $this->attributes['created_at'] - datetime - contains the creation date
+     * $this->attributes['updated_at'] - datetime - contains the update date
      * $this->order_items - OrderItem[] - contains the order items list
-     * $this->client - User - contains the order client object
+     * $this->attributes['user_id'] - int - contains the order client ID
+     * $this->user - User - contains the order client object
      */
     protected $fillable = [
-        'client_id',
+        'user_id',
         'total',
         'status',
         'payment_method',
@@ -38,7 +40,7 @@ class Order extends Model
             'status' => 'required|string|max:255',
             'payment_method' => 'required|string|max:255',
             'payment_status' => 'required|string|max:255',
-            'client_id' => 'required|integer|exists:users,id',
+            'user_id' => 'required|integer|exists:users,id',
         ]);
     }
 
@@ -47,9 +49,9 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function client(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function getId(): int
@@ -104,9 +106,9 @@ class Order extends Model
         return $this->order_items;
     }
 
-    public function getClient(): User
+    public function getUser(): User
     {
-        return $this->client;
+        return $this->user;
     }
 
     // Methods for managing order items

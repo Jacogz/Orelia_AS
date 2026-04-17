@@ -18,13 +18,13 @@ class MaterialController extends Controller
             $viewData['subtitle'] = __('materials.subtitle');
             $viewData['materials'] = $materials;
 
-            return view('materials.user.index', ['viewData' => $viewData]);
+            return view('user.materials.index')->with('viewData', $viewData);
         } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('materials.title');
             $viewData['materials'] = collect();
 
-            return view('materials.user.index', ['viewData' => $viewData]);
+            return view('user.materials.index')->with('viewData', $viewData);
         }
     }
 }

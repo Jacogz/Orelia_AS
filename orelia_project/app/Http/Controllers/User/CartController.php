@@ -19,6 +19,7 @@ class CartController extends Controller
      * - Stores piece IDs and quantities in session
      * - Relates to database models: Piece, Order, OrderItem
      */
+    // Está duplicado
     public function __construct()
     {
         $this->middleware('auth');
@@ -50,14 +51,16 @@ class CartController extends Controller
         }
 
         $viewData = [];
+        //Falta lang
         $viewData['title'] = 'Cart - Orelia';
         $viewData['subtitle'] = 'Shopping Cart';
         $viewData['cartItems'] = $cartItems;
         $viewData['total'] = $total;
 
-        return view('cart.index')->with('viewData', $viewData);
+        return view('user.cart.index')->with('viewData', $viewData);
     }
 
+    //Comentario duplica codigo
     /**
      * Add a piece to the cart.
      */
@@ -140,6 +143,7 @@ class CartController extends Controller
             return back()->with('error', 'Cart is empty');
         }
 
+        //  Estándar fill
         $order = Order::create([
             'client_id' => $user->id,
             'total' => 0,
@@ -154,6 +158,7 @@ class CartController extends Controller
             $piece = Piece::find($pieceId);
 
             if ($piece) {
+                //getter
                 $subtotal = $piece->price * $quantity;
 
                 OrderItem::create([
@@ -172,6 +177,7 @@ class CartController extends Controller
 
         $request->session()->forget('cart');
 
+        // Nombre de ruta, no url
         return redirect('/orders')->with('success', 'Order created successfully');
     }
 }
