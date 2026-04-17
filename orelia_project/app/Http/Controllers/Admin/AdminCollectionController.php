@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,7 +39,7 @@ class AdminCollectionController extends Controller
 
             return redirect()->route('admin.collections.index')
                 ->with('success', __('collections.created'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }
@@ -64,7 +65,7 @@ class AdminCollectionController extends Controller
 
             return redirect()->route('admin.collections.index')
                 ->with('success', __('collections.updated'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }
@@ -78,7 +79,7 @@ class AdminCollectionController extends Controller
 
             return redirect()->route('admin.collections.index')
                 ->with('success', __('collections.deleted'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }

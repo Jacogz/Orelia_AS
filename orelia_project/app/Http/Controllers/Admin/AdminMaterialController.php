@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Material;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,7 +39,7 @@ class AdminMaterialController extends Controller
 
             return redirect()->route('admin.materials.index')
                 ->with('success', __('materials.created'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }
@@ -64,7 +65,7 @@ class AdminMaterialController extends Controller
 
             return redirect()->route('admin.materials.index')
                 ->with('success', __('materials.updated'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }
@@ -78,7 +79,7 @@ class AdminMaterialController extends Controller
 
             return redirect()->route('admin.materials.index')
                 ->with('success', __('materials.deleted'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }

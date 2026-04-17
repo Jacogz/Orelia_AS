@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
+use Exception;
 use Illuminate\View\View;
 
 class CollectionController extends Controller
@@ -18,7 +19,7 @@ class CollectionController extends Controller
             $viewData['collections'] = $collections;
 
             return view('collections.user.index', ['viewData' => $viewData]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('collections.title');
             $viewData['collections'] = collect();
@@ -37,7 +38,7 @@ class CollectionController extends Controller
             $viewData['pieces'] = $collection->getPieces();
 
             return view('collections.user.show', ['viewData' => $viewData]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('collections.title');
             $viewData['collection'] = null;

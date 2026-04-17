@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\Piece;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,7 +42,7 @@ class AdminPieceController extends Controller
 
             return redirect()->route('admin.pieces.index')
                 ->with('success', __('pieces.created'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('pieces.error'));
         }
@@ -69,7 +70,7 @@ class AdminPieceController extends Controller
 
             return redirect()->route('admin.pieces.index')
                 ->with('success', __('pieces.updated'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('pieces.error'));
         }
@@ -83,7 +84,7 @@ class AdminPieceController extends Controller
 
             return redirect()->route('admin.pieces.index')
                 ->with('success', __('pieces.deleted'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('pieces.error'));
         }

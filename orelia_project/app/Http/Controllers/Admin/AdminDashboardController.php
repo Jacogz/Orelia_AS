@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
 use App\Models\User;
+use Exception;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
@@ -29,7 +30,7 @@ class AdminDashboardController extends Controller
                 ->orderByDesc('total_sold')
                 ->take(3)
                 ->get();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', __('dashboard.error'));
         }

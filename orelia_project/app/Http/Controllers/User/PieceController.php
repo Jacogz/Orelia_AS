@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Piece;
+use Exception;
 use Illuminate\View\View;
 
 class PieceController extends Controller
@@ -18,7 +19,7 @@ class PieceController extends Controller
             $viewData['pieces'] = $pieces;
 
             return view('pieces.user.index', ['viewData' => $viewData]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('pieces.title');
             $viewData['pieces'] = collect();
@@ -36,7 +37,7 @@ class PieceController extends Controller
             $viewData['piece'] = $piece;
 
             return view('pieces.user.show', ['viewData' => $viewData]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $viewData = [];
             $viewData['title'] = __('pieces.title');
             $viewData['piece'] = null;
