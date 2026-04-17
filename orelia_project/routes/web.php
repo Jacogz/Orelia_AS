@@ -1,16 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\HomeController;
-use App\Http\Controllers\User\CartController;
-use App\Http\Controllers\User\PieceController;
-use App\Http\Controllers\User\MaterialController;
-use App\Http\Controllers\User\CollectionController;
-
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminPieceController;
-use App\Http\Controllers\Admin\AdminMaterialController;
 use App\Http\Controllers\Admin\AdminCollectionController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminMaterialController;
+use App\Http\Controllers\Admin\AdminPieceController;
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CollectionController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\MaterialController;
+use App\Http\Controllers\User\PieceController;
+use Illuminate\Support\Facades\Route;
 
 
 Auth::routes();
@@ -20,8 +19,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // User Routes
 Route::get('/pieces', [PieceController::class, 'index'])->name('pieces.index');
+Route::get('/pieces/{id}', [PieceController::class, 'show'])->name('pieces.show');
 Route::get('/materials', [MaterialController::class, 'index'])->name('materials.index');
 Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
+Route::get('/collections/{id}', [CollectionController::class, 'show'])->name('collections.show');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 // Admin Routes

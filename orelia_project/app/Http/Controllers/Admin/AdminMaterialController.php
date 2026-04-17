@@ -4,34 +4,84 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Material;
-
-use Illuminate\Support\Facades\Auth;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminMaterialController extends Controller
 {
     public function index(): View
     {
-        return view('materials.admin.index');
+        $materials = Material::all();
+        $viewData = [];
+        $viewData['title'] = __('materials.title');
+        $viewData['materials'] = $materials;
+
+        return view('materials.admin.index', ['viewData' => $viewData]);
     }
 
-        public function create(): View
+    public function create(): View
     {
-        return view('materials.admin.create');
+        $viewData = [];
+        $viewData['title'] = __('materials.create_title');
+
+        return view('materials.admin.create', ['viewData' => $viewData]);
     }
 
-    public function store(Request $request): View|RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
+        try {
+            $validationData = Material::validate($request);
+            $material = new Material;
+            $material->fill($validationData);
+            $material->save();
 
+            return redirect()->route('admin.materials.index')
+                ->with('success', __('materials.created'));
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('error', __('materials.error'));
+        }
     }
 
     public function edit(string $id): View
     {
-        return view('materials.admin.edit');
+        $material = Material::findOrFail($id);
+        $viewData = [];
+        $viewData['title'] = __('materials.edit_title');
+        $viewData['material'] = $material;
+
+        return view('materials.admin.edit', ['viewData' => $viewData]);
     }
 
-    public function update(Request $request, string $id): View|RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
+        try {
+            $material = Material::findOrFail($id);
+            $validationData = Material::validate($request);
+            $material->fill($validationData);
+            $material->save();
 
+            return redirect()->route('admin.materials.index')
+                ->with('success', __('materials.updated'));
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('error', __('materials.error'));
+        }
+    }
+
+    public function destroy(string $id): RedirectResponse
+    {
+        try {
+            $material = Material::findOrFail($id);
+            $material->delete();
+
+            return redirect()->route('admin.materials.index')
+                ->with('success', __('materials.deleted'));
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('error', __('materials.error'));
+        }
     }
 }

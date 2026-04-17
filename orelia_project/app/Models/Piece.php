@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
-
-use App\Models\Piece;
-use App\Models\Collection;
-use App\Models\Material;
-use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Piece extends Model
 {
     use HasFactory;
+
+    public const DEFAULT_IMAGE = 'https://via.placeholder.com/400x400?text=No+Image';
+
     /**
      * PIECE ATTRIBUTES
      * $this->attributes['id'] - int - contains the piece primary key
@@ -28,14 +26,14 @@ class Piece extends Model
      * $this->attributes['image_url'] - string - contains the piece image URL
      * $this->attributes['stock'] - int - contains the piece stock
      * $this->attributes['size'] - string - contains the piece size
-     * $this->attributes['weight'] - int - contains the piece weight
-     * $this->attributes['collection'] - Collection - contains the piece collection object (fk collection_id)
-     * $this->attributes['materials'] - Material[] - contains the piece materials list
-     * $this->attributes['order_items'] - OrderItem[] - contains the piece order items list
+     * $this->attributes['weight'] - float - contains the piece weight
+     * $this->attributes['collection_id'] - int - contains the piece collection foreign key
+     * $this->collection - Collection - contains the piece collection object
+     * $this->materials - Material[] - contains the piece materials list
+     * $this->order_items - OrderItem[] - contains the piece order items list
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      */
-
     protected $fillable = [
         'name',
         'description',
@@ -45,7 +43,7 @@ class Piece extends Model
         'stock',
         'size',
         'weight',
-        'collection_id'
+        'collection_id',
     ];
 
     public static function validate(Request $request): array
@@ -62,20 +60,115 @@ class Piece extends Model
             'collection_id' => 'required|integer|exists:collections,id',
         ]);
     }
-    
+
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class, 'collection_id');
     }
 
-    public function materials(): HasMany
+    public function materials(): BelongsToMany
     {
-        return $this->hasMany(Material::class);
+        return $this->belongsToMany(Material::class, 'piece_material');
     }
 
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function getPrice(): float
+    {
+        return $this->attributes['price'];
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function getImageUrl(): string
+    {
+        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
+    }
+
+    public function getStock(): int
+    {
+        return $this->attributes['stock'];
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->attributes['size'];
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->attributes['weight'];
+    }
+
+    public function getCollectionId(): int
+    {
+        return $this->attributes['collection_id'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->attributes['price'] = $price;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->attributes['type'] = $type;
+    }
+
+    public function setImageUrl(?string $imageUrl): void
+    {
+        $this->attributes['image_url'] = $imageUrl;
+    }
+
+    public function setStock(int $stock): void
+    {
+        $this->attributes['stock'] = $stock;
+    }
+
+    public function setSize(?string $size): void
+    {
+        $this->attributes['size'] = $size;
+    }
+
+    public function setWeight(?float $weight): void
+    {
+        $this->attributes['weight'] = $weight;
+    }
+
+    public function setCollectionId(int $collectionId): void
+    {
+        $this->attributes['collection_id'] = $collectionId;
     }
 
     // Getters for related models
@@ -92,6 +185,6 @@ class Piece extends Model
 
     public function getOrderItems(): EloquentCollection
     {
-        return $this->orderItems;
+        return $this->order_items;
     }
 }
