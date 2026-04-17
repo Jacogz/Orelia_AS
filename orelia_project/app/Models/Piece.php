@@ -68,7 +68,7 @@ class Piece extends Model
 
     public function materials(): BelongsToMany
     {
-        return $this->belongsToMany(Material::class);
+        return $this->belongsToMany(Material::class, 'piece_material');
     }
 
     public function orderItems(): HasMany

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 
 class OrderItem extends Model
 {
+    use HasFactory;
     /**
      * ORDER ITEM ATTRIBUTES
      * $this->attributes['id'] - int - contains the order item primary key
