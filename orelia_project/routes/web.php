@@ -11,6 +11,7 @@ use App\Http\Controllers\User\MaterialController;
 use App\Http\Controllers\User\PieceController;
 use Illuminate\Support\Facades\Route;
 
+
 Auth::routes();
 
 // Home Route
@@ -55,3 +56,12 @@ Route::middleware(['auth', 'admin'])
         Route::put('/collections/{id}', [AdminCollectionController::class, 'update'])->name('collections.update');
         Route::delete('/collections/{id}', [AdminCollectionController::class, 'destroy'])->name('collections.destroy');
     });
+
+Route::middleware('auth')->prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/remove-all', [CartController::class, 'removeAll'])->name('cart.removeAll');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
