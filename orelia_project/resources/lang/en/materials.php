@@ -20,6 +20,9 @@ return [
     'delete' => 'Delete',
     'create' => 'Create Material',
 
+    'all_types' => 'All Types',
+    'view' => 'View Details',
+
     // Messages
     'created' => 'Material created successfully.',
     'updated' => 'Material updated successfully.',

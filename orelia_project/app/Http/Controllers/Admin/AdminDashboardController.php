@@ -9,31 +9,25 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
 use App\Models\User;
-use Exception;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
     public function index(): View
     {
-        try {
-            $totalOrders = Order::count();
-            $totalRevenue = Order::where('payment_status', 'paid')->sum('total');
-            $totalPieces = Piece::count();
-            $totalUsers = User::where('role', 'client')->count();
-            $totalCollections = Collection::count();
-            $totalMaterials = Material::count();
-            $recentOrders = Order::with('client')->latest()->take(5)->get();
-            $topPieces = OrderItem::with('piece')
-                ->selectRaw('piece_id, SUM(quantity) as total_sold')
-                ->groupBy('piece_id')
-                ->orderByDesc('total_sold')
-                ->take(3)
-                ->get();
-        } catch (Exception $e) {
-            return redirect()->back()
-                ->with('error', __('dashboard.error'));
-        }
+        $totalOrders = Order::count();
+        $totalRevenue = Order::where('payment_status', 'paid')->sum('total');
+        $totalPieces = Piece::count();
+        $totalUsers = User::where('role', 'client')->count();
+        $totalCollections = Collection::count();
+        $totalMaterials = Material::count();
+        $recentOrders = Order::with('client')->latest()->take(5)->get();
+        $topPieces = OrderItem::with('piece')
+            ->selectRaw('piece_id, SUM(quantity) as total_sold')
+            ->groupBy('piece_id')
+            ->orderByDesc('total_sold')
+            ->take(3)
+            ->get();
 
         $viewData = [];
         $viewData['title'] = __('dashboard.title');

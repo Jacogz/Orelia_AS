@@ -22,10 +22,16 @@ return [
     'delete' => 'Delete',
     'actions' => 'Actions',
     'confirm_delete' => 'Are you sure you want to delete this item?',
+    'search' => 'Search',
 
     // Messages
     'success' => 'Success',
     'error' => 'Error',
     'unauthorized' => 'Unauthorized access.',
     'validation_errors' => 'Validation Errors',
+
+    // Filters
+    'filter' => 'Filter',
+    'clear' => 'Clear',
+    'back' => 'Back',
 ];

@@ -28,6 +28,14 @@ return [
     'create' => 'Create Piece',
     'view_detail' => 'View detail',
 
+    'all_types' => 'All Types',
+    'all_collections' => 'All Collections',
+    'all_stock' => 'All',
+    'min_price' => 'Min Price',
+    'max_price' => 'Max Price',
+    'view' => 'View Details',
+    'add_to_cart' => 'Add to Cart',
+
     // Messages
     'created' => 'Piece created successfully.',
     'updated' => 'Piece updated successfully.',
@@ -35,8 +43,8 @@ return [
     'error' => 'An error occurred. Please try again.',
     'empty' => 'No pieces found.',
     'empty_user' => 'No pieces available at the moment.',
-    'in_stock' => 'In stock',
-    'out_of_stock' => 'Out of stock',
+    'in_stock' => 'In Stock',
+    'out_of_stock' => 'Out of Stock',
     'no_image' => 'No image available',
 
     // Subtitle

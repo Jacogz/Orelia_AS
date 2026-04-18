@@ -11,14 +11,14 @@ class OrderItemFactory extends Factory
     public function definition(): array
     {
         $unitPrice = fake()->numberBetween(2500, 500000);
-        $quantity  = fake()->numberBetween(1, 4);
+        $quantity = fake()->numberBetween(1, 4);
 
         return [
-            'order_id'   => Order::factory(),
-            'piece_id'   => Piece::factory(),
+            'order_id' => Order::factory(),
+            'piece_id' => Piece::factory(),
             'unit_price' => $unitPrice,
-            'quantity'   => $quantity,
-            'subtotal'   => $unitPrice * $quantity,
+            'quantity' => $quantity,
+            'subtotal' => $unitPrice * $quantity,
         ];
     }
 }

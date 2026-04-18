@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +19,7 @@ class User extends Authenticatable
      * USER ATTRIBUTES
      * $this->attributes['id'] - int - contains the user primary key
      * $this->attributes['name'] - string - contains the user name
+     * $this->attributes['last_name'] - string - contains the user last name
      * $this->attributes['email'] - string - contains the user email
      * $this->attributes['password'] - string - contains the user password
      * $this->attributes['address'] - string - contains the user address
@@ -26,12 +27,6 @@ class User extends Authenticatable
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
      * $this->orders - Order[] - contains the user orders list
-     */
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -42,21 +37,11 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -79,7 +64,7 @@ class User extends Authenticatable
 
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class, 'client_id');
+        return $this->hasMany(Order::class, 'user_id');
     }
 
     public function getFullName(): string
@@ -101,6 +86,8 @@ class User extends Authenticatable
     {
         return $this->role === null;
     }
+
+    // Getters for related models
 
     public function getOrders(): EloquentCollection
     {

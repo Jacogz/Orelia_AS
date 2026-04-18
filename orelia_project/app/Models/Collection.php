@@ -21,7 +21,6 @@ class Collection extends Model
      * $this->attributes['updated_at'] - timestamp - contains the collection update timestamp
      * $this->pieces - Piece[] - contains the collection pieces list
      */
-    
     protected $fillable = [
         'name',
         'description',
@@ -35,11 +34,6 @@ class Collection extends Model
         ]);
     }
 
-    public function pieces(): HasMany
-    {
-        return $this->hasMany(Piece::class);
-    }
-
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -50,14 +44,14 @@ class Collection extends Model
         return $this->attributes['name'];
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->attributes['description'];
-    }
-
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
     }
 
     public function setDescription(?string $description): void
@@ -65,7 +59,10 @@ class Collection extends Model
         $this->attributes['description'] = $description;
     }
 
-    // Getters for related models
+    public function pieces(): HasMany
+    {
+        return $this->hasMany(Piece::class);
+    }
 
     public function getPieces(): EloquentCollection
     {

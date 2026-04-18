@@ -34,7 +34,6 @@ class Piece extends Model
      * $this->materials - Material[] - contains the piece materials list
      * $this->order_items - OrderItem[] - contains the piece order items list
      */
-    //Ordenar atributos primitivos->relaciones y no primitivos, conservar orden en métodos
     protected $fillable = [
         'name',
         'description',
@@ -62,6 +61,103 @@ class Piece extends Model
         ]);
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->attributes['price'];
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->attributes['price'] = $price;
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function setType(string $type): void
+    {
+        $this->attributes['type'] = $type;
+    }
+
+    public function getImageUrl(): string
+    {
+        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
+    }
+
+    public function setImageUrl(?string $imageUrl): void
+    {
+        $this->attributes['image_url'] = $imageUrl;
+    }
+
+    public function getStock(): int
+    {
+        return $this->attributes['stock'];
+    }
+
+    public function setStock(int $stock): void
+    {
+        $this->attributes['stock'] = $stock;
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->attributes['size'];
+    }
+
+    public function setSize(?string $size): void
+    {
+        $this->attributes['size'] = $size;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->attributes['weight'];
+    }
+
+    public function setWeight(?float $weight): void
+    {
+        $this->attributes['weight'] = $weight;
+    }
+
+    public function getCollectionId(): int
+    {
+        return $this->attributes['collection_id'];
+    }
+
+    public function setCollectionId(int $collectionId): void
+    {
+        $this->attributes['collection_id'] = $collectionId;
+    }
+
+    // Relationship definitions
+
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class, 'collection_id');
@@ -77,102 +173,7 @@ class Piece extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function getId(): int
-    {
-        return $this->attributes['id'];
-    }
-
-    public function getName(): string
-    {
-        return $this->attributes['name'];
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->attributes['description'];
-    }
-
-    public function getPrice(): float
-    {
-        return $this->attributes['price'];
-    }
-
-    public function getType(): string
-    {
-        return $this->attributes['type'];
-    }
-
-    public function getImageUrl(): string
-    {
-        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
-    }
-
-    public function getStock(): int
-    {
-        return $this->attributes['stock'];
-    }
-
-    public function getSize(): ?string
-    {
-        return $this->attributes['size'];
-    }
-
-    public function getWeight(): ?float
-    {
-        return $this->attributes['weight'];
-    }
-
-    public function getCollectionId(): int
-    {
-        return $this->attributes['collection_id'];
-    }
-
-    public function setName(string $name): void
-    {
-        $this->attributes['name'] = $name;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->attributes['description'] = $description;
-    }
-
-    public function setPrice(float $price): void
-    {
-        $this->attributes['price'] = $price;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->attributes['type'] = $type;
-    }
-
-    public function setImageUrl(?string $imageUrl): void
-    {
-        $this->attributes['image_url'] = $imageUrl;
-    }
-
-    public function setStock(int $stock): void
-    {
-        $this->attributes['stock'] = $stock;
-    }
-
-    public function setSize(?string $size): void
-    {
-        $this->attributes['size'] = $size;
-    }
-
-    public function setWeight(?float $weight): void
-    {
-        $this->attributes['weight'] = $weight;
-    }
-
-    public function setCollectionId(int $collectionId): void
-    {
-        $this->attributes['collection_id'] = $collectionId;
-    }
-
-    // Getters for related models
+    // Relationship getters
 
     public function getCollection(): Collection
     {

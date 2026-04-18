@@ -10,9 +10,9 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'client_id'      => User::factory()->client(),
-            'total'          => 0, // recalculated after items are attached in the seeder
-            'status'         => fake()->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+            'client_id' => User::factory()->client(),
+            'total' => 0, // recalculated after items are attached in the seeder
+            'status' => fake()->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
             'payment_method' => fake()->randomElement(['credit_card', 'debit_card', 'paypal', 'bank_transfer']),
             'payment_status' => fake()->randomElement(['pending', 'paid', 'failed', 'refunded']),
         ];
@@ -21,7 +21,7 @@ class OrderFactory extends Factory
     public function pending(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'         => 'pending',
+            'status' => 'pending',
             'payment_status' => 'pending',
         ]);
     }
@@ -29,7 +29,7 @@ class OrderFactory extends Factory
     public function completed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'         => 'delivered',
+            'status' => 'delivered',
             'payment_status' => 'paid',
         ]);
     }
@@ -37,7 +37,7 @@ class OrderFactory extends Factory
     public function cancelled(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'         => 'cancelled',
+            'status' => 'cancelled',
             'payment_status' => fake()->randomElement(['refunded', 'failed']),
         ]);
     }

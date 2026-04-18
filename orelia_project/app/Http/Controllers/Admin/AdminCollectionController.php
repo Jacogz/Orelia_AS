@@ -4,16 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
-use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminCollectionController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $collections = Collection::all();
+        $query = Collection::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%'.$request->name.'%');
+        }
+
+        if ($request->filled('description')) {
+            $query->where('description', 'like', '%'.$request->description.'%');
+        }
+
+        $collections = $query->get();
+
         $viewData = [];
         $viewData['title'] = __('collections.title');
         $viewData['collections'] = $collections;
@@ -31,23 +42,25 @@ class AdminCollectionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $validationData = Collection::validate($request);
+
         try {
-            $validationData = Collection::validate($request);
             $collection = new Collection;
             $collection->fill($validationData);
             $collection->save();
-
-            return redirect()->route('admin.collections.index')
-                ->with('success', __('collections.created'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }
+
+        return redirect()->route('admin.collections.index')
+            ->with('success', __('collections.created'));
     }
 
     public function edit(string $id): View
     {
         $collection = Collection::findOrFail($id);
+
         $viewData = [];
         $viewData['title'] = __('collections.edit_title');
         $viewData['collection'] = $collection;
@@ -57,18 +70,19 @@ class AdminCollectionController extends Controller
 
     public function update(Request $request, string $id): RedirectResponse
     {
+        $validationData = Collection::validate($request);
+
         try {
             $collection = Collection::findOrFail($id);
-            $validationData = Collection::validate($request);
             $collection->fill($validationData);
             $collection->save();
-
-            return redirect()->route('admin.collections.index')
-                ->with('success', __('collections.updated'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }
+
+        return redirect()->route('admin.collections.index')
+            ->with('success', __('collections.updated'));
     }
 
     public function destroy(string $id): RedirectResponse
@@ -76,12 +90,12 @@ class AdminCollectionController extends Controller
         try {
             $collection = Collection::findOrFail($id);
             $collection->delete();
-
-            return redirect()->route('admin.collections.index')
-                ->with('success', __('collections.deleted'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('collections.error'));
         }
+
+        return redirect()->route('admin.collections.index')
+            ->with('success', __('collections.deleted'));
     }
 }

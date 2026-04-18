@@ -17,7 +17,7 @@ class CollectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'        => fake()->unique()->randomElement(self::$collectionNames),
+            'name' => fake()->unique()->randomElement(self::$collectionNames),
             'description' => fake()->paragraph(2),
         ];
     }

@@ -3,7 +3,6 @@
 @section('title', $viewData['title'])
 
 @section('content')
-<!-- Falta if errors mostrar errores de formulario -->
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -11,6 +10,15 @@
                     <h4 class="mb-0">{{ $viewData['title'] }}</h4>
                 </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('admin.pieces.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">

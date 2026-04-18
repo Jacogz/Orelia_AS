@@ -20,19 +20,19 @@ class DatabaseSeeder extends Seeder
     {
         // ── Fixed accounts ──────────────────────────────────────────────────────
         $admin = User::factory()->admin()->create([
-            'name'      => 'Admin',
+            'name' => 'Admin',
             'last_name' => 'User',
-            'email'     => 'admin@admin.com',
-            'address'   => '123 Admin St, Springfield',
-            'password'  => Hash::make('adminpassword'),
+            'email' => 'admin@admin.com',
+            'address' => '123 Admin St, Springfield',
+            'password' => Hash::make('adminpassword'),
         ]);
 
         $demoClient = User::factory()->client()->create([
-            'name'      => 'John',
+            'name' => 'John',
             'last_name' => 'Doe',
-            'email'     => 'john.doe@example.com',
-            'address'   => '456 Maple Ave, Shelbyville',
-            'password'  => Hash::make('userpassword'),
+            'email' => 'john.doe@example.com',
+            'address' => '456 Maple Ave, Shelbyville',
+            'password' => Hash::make('userpassword'),
         ]);
 
         // ── Random clients ───────────────────────────────────────────────────────
@@ -69,21 +69,21 @@ class DatabaseSeeder extends Seeder
             for ($i = 0; $i < $orderCount; $i++) {
                 $order = Order::factory()->create(['client_id' => $client->id]);
 
-                $itemCount     = fake()->numberBetween(1, 4);
+                $itemCount = fake()->numberBetween(1, 4);
                 $selectedPieces = $allPieces->random($itemCount);
-                $orderTotal    = 0;
+                $orderTotal = 0;
 
                 foreach ($selectedPieces as $piece) {
-                    $quantity  = fake()->numberBetween(1, 3);
+                    $quantity = fake()->numberBetween(1, 3);
                     $unitPrice = $piece->price;
-                    $subtotal  = $unitPrice * $quantity;
+                    $subtotal = $unitPrice * $quantity;
 
                     OrderItem::create([
-                        'order_id'   => $order->id,
-                        'piece_id'   => $piece->id,
+                        'order_id' => $order->id,
+                        'piece_id' => $piece->id,
                         'unit_price' => $unitPrice,
-                        'quantity'   => $quantity,
-                        'subtotal'   => $subtotal,
+                        'quantity' => $quantity,
+                        'subtotal' => $subtotal,
                     ]);
 
                     $orderTotal += $subtotal;

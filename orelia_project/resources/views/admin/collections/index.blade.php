@@ -8,6 +8,23 @@
         <a href="{{ route('admin.collections.create') }}" class="btn btn-primary">{{ __('collections.create') }}</a>
     </div>
 
+    <form method="GET" action="{{ route('admin.collections.index') }}" class="card p-3 mb-4 border-0 shadow-sm">
+        <div class="row g-2">
+            <div class="col-md-5">
+                <input type="text" name="name" class="form-control" placeholder="{{ __('collections.name') }}" value="{{ request('name') }}" />
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="description" class="form-control" placeholder="{{ __('collections.description') }}" value="{{ request('description') }}" />
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-dark w-100">{{ __('general.filter') }}</button>
+            </div>
+            <div class="col-md-1">
+                <a href="{{ route('admin.collections.index') }}" class="btn btn-outline-secondary w-100">{{ __('general.clear') }}</a>
+            </div>
+        </div>
+    </form>
+
     @if($viewData['collections']->isEmpty())
         <div class="alert alert-info">{{ __('collections.empty') }}</div>
     @else
@@ -36,7 +53,7 @@
                                         onclick="return confirm(&quot;{{ __('general.confirm_delete') }}&quot;)">
                                         {{ __('collections.delete') }}
                                     </button>
-                                </form> 
+                                </form>
                             </div>
                         </td>
                     </tr>

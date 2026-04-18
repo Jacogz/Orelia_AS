@@ -51,7 +51,7 @@ class CartController extends Controller
         }
 
         $viewData = [];
-        //Falta lang
+        // Falta lang
         $viewData['title'] = 'Cart - Orelia';
         $viewData['subtitle'] = 'Shopping Cart';
         $viewData['cartItems'] = $cartItems;
@@ -60,7 +60,7 @@ class CartController extends Controller
         return view('user.cart.index')->with('viewData', $viewData);
     }
 
-    //Comentario duplica codigo
+    // Comentario duplica codigo
     /**
      * Add a piece to the cart.
      */
@@ -158,7 +158,7 @@ class CartController extends Controller
             $piece = Piece::find($pieceId);
 
             if ($piece) {
-                //getter
+                // getter
                 $subtotal = $piece->price * $quantity;
 
                 OrderItem::create([

@@ -11,7 +11,7 @@ class MaterialFactory extends Factory
         ['name' => 'Yellow Gold',    'type' => 'metal',    'color' => 'yellow'],
         ['name' => 'White Gold',     'type' => 'metal',    'color' => 'white'],
         ['name' => 'Rose Gold',      'type' => 'metal',    'color' => 'rose'],
-        ['name' => 'Sterling Silver','type' => 'metal',    'color' => 'silver'],
+        ['name' => 'Sterling Silver', 'type' => 'metal',    'color' => 'silver'],
         ['name' => 'Platinum',       'type' => 'metal',    'color' => 'silver'],
         ['name' => 'Titanium',       'type' => 'metal',    'color' => 'gray'],
         ['name' => 'Bronze',         'type' => 'metal',    'color' => 'brown'],
@@ -30,8 +30,8 @@ class MaterialFactory extends Factory
         ['name' => 'Amber',          'type' => 'organic',  'color' => 'yellow'],
         ['name' => 'Swarovski Crystal', 'type' => 'crystal', 'color' => 'clear'],
         ['name' => 'Quartz',         'type' => 'crystal',  'color' => 'clear'],
-        ['name' => 'Resin',          'type' => 'synthetic','color' => 'multicolor'],
-        ['name' => 'Enamel',         'type' => 'synthetic','color' => 'multicolor'],
+        ['name' => 'Resin',          'type' => 'synthetic', 'color' => 'multicolor'],
+        ['name' => 'Enamel',         'type' => 'synthetic', 'color' => 'multicolor'],
     ];
 
     public function definition(): array
@@ -39,9 +39,9 @@ class MaterialFactory extends Factory
         $material = fake()->unique()->randomElement(self::$materials);
 
         return [
-            'name'        => $material['name'],
-            'type'        => $material['type'],
-            'color'       => $material['color'],
+            'name' => $material['name'],
+            'type' => $material['type'],
+            'color' => $material['color'],
             'description' => fake()->sentence(),
         ];
     }

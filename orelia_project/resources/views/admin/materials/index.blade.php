@@ -8,6 +8,31 @@
         <a href="{{ route('admin.materials.create') }}" class="btn btn-primary">{{ __('materials.create') }}</a>
     </div>
 
+    <form method="GET" action="{{ route('admin.materials.index') }}" class="card p-3 mb-4 border-0 shadow-sm">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="name" class="form-control" placeholder="{{ __('materials.name') }}" value="{{ request('name') }}" />
+            </div>
+            <div class="col-md-3">
+                <select name="type" class="form-select">
+                    <option value="">{{ __('materials.all_types') }}</option>
+                    @foreach ($viewData['types'] as $type)
+                        <option value="{{ $type }}" {{ request('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="color" class="form-control" placeholder="{{ __('materials.color') }}" value="{{ request('color') }}" />
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-dark w-100">{{ __('general.filter') }}</button>
+            </div>
+            <div class="col-md-1">
+                <a href="{{ route('admin.materials.index') }}" class="btn btn-outline-secondary w-100">{{ __('general.clear') }}</a>
+            </div>
+        </div>
+    </form>
+
     @if($viewData['materials']->isEmpty())
         <div class="alert alert-info">{{ __('materials.empty') }}</div>
     @else

@@ -4,19 +4,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Material;
-use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminMaterialController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $materials = Material::all();
+        $query = Material::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%'.$request->name.'%');
+        }
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('color')) {
+            $query->where('color', 'like', '%'.$request->color.'%');
+        }
+
+        $materials = $query->get();
+        $types = Material::select('type')->distinct()->pluck('type');
+
         $viewData = [];
         $viewData['title'] = __('materials.title');
         $viewData['materials'] = $materials;
+        $viewData['types'] = $types;
 
         return view('admin.materials.index')->with('viewData', $viewData);
     }
@@ -31,23 +48,25 @@ class AdminMaterialController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $validationData = Material::validate($request);
+
         try {
-            $validationData = Material::validate($request);
             $material = new Material;
             $material->fill($validationData);
             $material->save();
-
-            return redirect()->route('admin.materials.index')
-                ->with('success', __('materials.created'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }
+
+        return redirect()->route('admin.materials.index')
+            ->with('success', __('materials.created'));
     }
 
     public function edit(string $id): View
     {
         $material = Material::findOrFail($id);
+
         $viewData = [];
         $viewData['title'] = __('materials.edit_title');
         $viewData['material'] = $material;
@@ -57,18 +76,19 @@ class AdminMaterialController extends Controller
 
     public function update(Request $request, string $id): RedirectResponse
     {
+        $validationData = Material::validate($request);
+
         try {
             $material = Material::findOrFail($id);
-            $validationData = Material::validate($request);
             $material->fill($validationData);
             $material->save();
-
-            return redirect()->route('admin.materials.index')
-                ->with('success', __('materials.updated'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }
+
+        return redirect()->route('admin.materials.index')
+            ->with('success', __('materials.updated'));
     }
 
     public function destroy(string $id): RedirectResponse
@@ -76,12 +96,12 @@ class AdminMaterialController extends Controller
         try {
             $material = Material::findOrFail($id);
             $material->delete();
-
-            return redirect()->route('admin.materials.index')
-                ->with('success', __('materials.deleted'));
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return redirect()->back()
                 ->with('error', __('materials.error'));
         }
+
+        return redirect()->route('admin.materials.index')
+            ->with('success', __('materials.deleted'));
     }
 }

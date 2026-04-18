@@ -3,29 +3,38 @@
 @section('title', $viewData['title'])
 
 @section('content')
-    <div class="mb-4">
+    <div class="mb-4 text-center">
         <h2>{{ $viewData['title'] }}</h2>
-        <p class="text-muted">{{ $viewData['subtitle'] }}</p>
     </div>
 
+    <form method="GET" action="{{ route('materials.index') }}" class="text-center mb-5">
+        @if(request('name'))
+            <p class="text-uppercase small mb-3">{{ __('materials.results_for') }} &ldquo;{{ request('name') }}&rdquo;</p>
+        @endif
+        <div class="d-inline-flex border-bottom border-dark" style="width: 480px">
+            <input
+                type="text"
+                name="name"
+                class="form-control border-0 shadow-none"
+                value="{{ request('name') }}"
+                placeholder="{{ $viewData['subtitle'] }}"
+                autocomplete="off"
+            />
+            <button type="submit" class="btn btn-dark rounded-0 px-4">{{ __('general.search') }}</button>
+        </div>
+    </form>
+
     @if($viewData['materials']->isEmpty())
-        <div class="alert alert-info">{{ __('materials.empty_user') }}</div>
+        <div class="text-center text-muted py-5 text-uppercase small">{{ __('materials.empty_user') }}</div>
     @else
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
             @foreach($viewData['materials'] as $material)
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">{{ $material->getName() }}</h5>
-                                <span class="badge bg-dark">{{ $material->getType() }}</span>
-                            </div>
-                            <p class="card-text text-muted">{{ $material->getDescription() }}</p>
-                        </div>
-                        <div class="card-footer bg-transparent d-flex align-items-center gap-2">
-                            <span class="text-muted small">{{ $material->getColor() }}</span>
-                        </div>
-                    </div>
+                <div class="col text-center">
+                    <a href="{{ route('materials.show', $material->getId()) }}" class="d-block text-uppercase small fw-semibold text-dark text-decoration-none mb-1">
+                        {{ $material->getName() }}
+                    </a>
+                    <span class="d-block text-muted small">{{ $material->getType() }}</span>
+                    <span class="d-block text-muted small">{{ $material->getColor() }}</span>
                 </div>
             @endforeach
         </div>

@@ -40,11 +40,6 @@ class Material extends Model
         ]);
     }
 
-    public function pieces(): BelongsToMany
-    {
-        return $this->belongsToMany(Piece::class);
-    }
-
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -55,24 +50,14 @@ class Material extends Model
         return $this->attributes['name'];
     }
 
-    public function getType(): string
-    {
-        return $this->attributes['type'];
-    }
-
-    public function getDescription(): string
-    {
-        return $this->attributes['description'];
-    }
-
-    public function getColor(): string
-    {
-        return $this->attributes['color'];
-    }
-
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
     }
 
     public function setType(string $type): void
@@ -80,9 +65,19 @@ class Material extends Model
         $this->attributes['type'] = $type;
     }
 
+    public function getDescription(): string
+    {
+        return $this->attributes['description'];
+    }
+
     public function setDescription(string $description): void
     {
         $this->attributes['description'] = $description;
+    }
+
+    public function getColor(): string
+    {
+        return $this->attributes['color'];
     }
 
     public function setColor(string $color): void
@@ -90,7 +85,10 @@ class Material extends Model
         $this->attributes['color'] = $color;
     }
 
-    // Getters for related models
+    public function pieces(): BelongsToMany
+    {
+        return $this->belongsToMany(Piece::class);
+    }
 
     public function getPieces(): EloquentCollection
     {

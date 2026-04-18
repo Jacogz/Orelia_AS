@@ -11,7 +11,6 @@ use App\Http\Controllers\User\MaterialController;
 use App\Http\Controllers\User\PieceController;
 use Illuminate\Support\Facades\Route;
 
-
 Auth::routes();
 
 // Home Route
@@ -21,6 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/pieces', [PieceController::class, 'index'])->name('pieces.index');
 Route::get('/pieces/{id}', [PieceController::class, 'show'])->name('pieces.show');
 Route::get('/materials', [MaterialController::class, 'index'])->name('materials.index');
+Route::get('/materials/{id}', [MaterialController::class, 'show'])->name('materials.show');
 Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
 Route::get('/collections/{id}', [CollectionController::class, 'show'])->name('collections.show');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

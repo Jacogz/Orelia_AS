@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class OrderItem extends Model
 {
     use HasFactory;
+
     /**
      * ORDER ITEM ATTRIBUTES
      * $this->attributes['id'] - int - contains the order item primary key
