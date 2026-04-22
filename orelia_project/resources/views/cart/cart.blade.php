@@ -1,1 +1,1 @@
-Shopping cart view.
+@include('cart.index')

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Carrito - Orelia',
+    'subtitle' => 'Carrito de compras',
+    'items' => 'Artículos',
+    'product' => 'Producto',
+    'currency' => '$',
+    'quantity' => 'Cantidad',
+    'subtotal' => 'Subtotal',
+    'total' => 'Total',
+    'actions' => 'Acciones',
+    'update' => 'Actualizar',
+    'remove' => 'Eliminar',
+    'clear' => 'Vaciar carrito',
+    'checkout' => 'Pagar',
+    'back_to_pieces' => 'Volver a piezas',
+    'empty_message' => 'Tu carrito está vacío.',
+    'piece_not_found' => 'La pieza no fue encontrada.',
+    'product_added' => 'Producto agregado al carrito.',
+    'updated' => 'Carrito actualizado.',
+    'product_removed' => 'Producto eliminado del carrito.',
+    'cleared' => 'Carrito vaciado.',
+    'empty' => 'El carrito está vacío.',
+    'order_created' => 'Pedido creado correctamente.',
+];
