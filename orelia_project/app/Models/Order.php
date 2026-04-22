@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-
-use App\Models\OrderItem;
-use App\models\User;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Order extends Model
 {
+    use HasFactory;
     /**
      * ORDER ATTRIBUTES
      * $this->attributes['id'] - int - contains the order primary key
@@ -21,15 +20,15 @@ class Order extends Model
      * $this->attributes['payment_method'] - string - contains the payment method
      * $this->attributes['payment_status'] - string - contains the payment status
      * $this->attributes['client_id'] - int - contains the order client ID
-     * $this->attributes['order_items'] - OrderItem[] - contains the order items list
+     * $this->order_items - OrderItem[] - contains the order items list
+     * $this->client - User - contains the order client object
      */
-
     protected $fillable = [
         'client_id',
         'total',
         'status',
         'payment_method',
-        'payment_status'
+        'payment_status',
     ];
 
     public static function validate(Request $request): array
@@ -53,7 +52,53 @@ class Order extends Model
         return $this->belongsTo(User::class, 'client_id');
     }
 
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getTotal(): int
+    {
+        return $this->attributes['total'];
+    }
+
+    public function getStatus(): string
+    {
+        return $this->attributes['status'];
+    }
+
+    public function getPaymentMethod(): string
+    {
+        return $this->attributes['payment_method'];
+    }
+
+    public function getPaymentStatus(): string
+    {
+        return $this->attributes['payment_status'];
+    }
+
+    public function setTotal(int $total): void
+    {
+        $this->attributes['total'] = $total;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->attributes['status'] = $status;
+    }
+
+    public function setPaymentMethod(string $paymentMethod): void
+    {
+        $this->attributes['payment_method'] = $paymentMethod;
+    }
+
+    public function setPaymentStatus(string $paymentStatus): void
+    {
+        $this->attributes['payment_status'] = $paymentStatus;
+    }
+
     // Getters for related models
+
     public function getOrderItems(): EloquentCollection
     {
         return $this->order_items;
@@ -62,5 +107,18 @@ class Order extends Model
     public function getClient(): User
     {
         return $this->client;
+    }
+
+    // Methods for managing order items
+
+    public function addOrderItem(OrderItem $orderItem): void
+    {
+        $orderItem->order_id = $this->getId();
+        $orderItem->save();
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): void
+    {
+        $orderItem->delete();
     }
 }
