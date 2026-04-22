@@ -13,21 +13,6 @@ use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    /**
-     * CART ATTRIBUTES
-     * - Manages the shopping cart for authenticated users
-     * - Stores piece IDs and quantities in session
-     * - Relates to database models: Piece, Order, OrderItem
-     */
-    // Está duplicado
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Display the shopping cart.
-     */
     public function index(Request $request): View
     {
         $cartItems = [];
@@ -39,7 +24,7 @@ class CartController extends Controller
             foreach ($cartData as $pieceId => $quantity) {
                 $piece = Piece::find($pieceId);
                 if ($piece) {
-                    $subtotal = $piece->price * $quantity;
+                    $subtotal = $piece->getPrice() * $quantity;
                     $cartItems[$pieceId] = [
                         'piece' => $piece,
                         'quantity' => $quantity,
@@ -51,25 +36,20 @@ class CartController extends Controller
         }
 
         $viewData = [];
-        // Falta lang
-        $viewData['title'] = 'Cart - Orelia';
-        $viewData['subtitle'] = 'Shopping Cart';
+        $viewData['title'] = __('cart.title');
+        $viewData['subtitle'] = __('cart.subtitle');
         $viewData['cartItems'] = $cartItems;
         $viewData['total'] = $total;
 
-        return view('user.cart.index')->with('viewData', $viewData);
+        return view('cart.index')->with('viewData', $viewData);
     }
 
-    // Comentario duplica codigo
-    /**
-     * Add a piece to the cart.
-     */
     public function add(string $id, Request $request): RedirectResponse
     {
         $piece = Piece::find($id);
 
         if (! $piece) {
-            return back()->with('error', 'Piece not found');
+            return back()->with('error', __('cart.piece_not_found'));
         }
 
         $cart = $request->session()->get('cart', []);
@@ -82,12 +62,9 @@ class CartController extends Controller
 
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Product added to cart');
+        return back()->with('success', __('cart.product_added'));
     }
 
-    /**
-     * Update the quantity of a piece in the cart.
-     */
     public function update(string $id, Request $request): RedirectResponse
     {
         $quantity = $request->input('quantity', 1);
@@ -99,58 +76,50 @@ class CartController extends Controller
         $piece = Piece::find($id);
 
         if (! $piece) {
-            return back()->with('error', 'Piece not found');
+            return back()->with('error', __('cart.piece_not_found'));
         }
 
         $cart = $request->session()->get('cart', []);
         $cart[$id] = $quantity;
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Cart updated');
+        return back()->with('success', __('cart.updated'));
     }
 
-    /**
-     * Remove a piece from the cart.
-     */
     public function remove(string $id, Request $request): RedirectResponse
     {
         $cart = $request->session()->get('cart', []);
         unset($cart[$id]);
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Product removed from cart');
+        return back()->with('success', __('cart.product_removed'));
     }
 
-    /**
-     * Clear all items from the cart.
-     */
     public function removeAll(Request $request): RedirectResponse
     {
         $request->session()->forget('cart');
 
-        return back()->with('success', 'Cart cleared');
+        return back()->with('success', __('cart.cleared'));
     }
 
-    /**
-     * Checkout: Create an Order from cart items.
-     */
     public function checkout(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $cartData = $request->session()->get('cart', []);
 
         if (empty($cartData)) {
-            return back()->with('error', 'Cart is empty');
+            return back()->with('error', __('cart.empty'));
         }
 
-        //  Estándar fill
-        $order = Order::create([
+        $order = new Order;
+        $order->fill([
             'client_id' => $user->id,
             'total' => 0,
             'status' => 'pending',
             'payment_method' => 'pending',
             'payment_status' => 'pending',
         ]);
+        $order->save();
 
         $total = 0;
 
@@ -158,26 +127,27 @@ class CartController extends Controller
             $piece = Piece::find($pieceId);
 
             if ($piece) {
-                // getter
-                $subtotal = $piece->price * $quantity;
+                $subtotal = $piece->getPrice() * $quantity;
 
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'piece_id' => $pieceId,
-                    'unit_price' => $piece->price,
+                $orderItem = new OrderItem;
+                $orderItem->fill([
+                    'order_id' => $order->getId(),
+                    'piece_id' => $piece->getId(),
+                    'unit_price' => $piece->getPrice(),
                     'quantity' => $quantity,
                     'subtotal' => $subtotal,
                 ]);
+                $orderItem->save();
 
                 $total += $subtotal;
             }
         }
 
-        $order->update(['total' => $total]);
+        $order->fill(['total' => $total]);
+        $order->save();
 
         $request->session()->forget('cart');
 
-        // Nombre de ruta, no url
-        return redirect('/orders')->with('success', 'Order created successfully');
+        return redirect()->route('cart.index')->with('success', __('cart.order_created'));
     }
 }
