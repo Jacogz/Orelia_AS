@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-
-use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -17,9 +16,17 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * USER ATTRIBUTES
+     * $this->attributes['id'] - int - contains the user primary key
+     * $this->attributes['name'] - string - contains the user name
+     * $this->attributes['last_name'] - string - contains the user last name
+     * $this->attributes['email'] - string - contains the user email
+     * $this->attributes['password'] - string - contains the user password
+     * $this->attributes['address'] - string - contains the user address
+     * $this->attributes['role'] - string - contains the user role
+     * $this->attributes['created_at'] - datetime - contains the creation date
+     * $this->attributes['updated_at'] - datetime - contains the update date
+     * $this->orders - Order[] - contains the user orders list
      */
     protected $fillable = [
         'name',
@@ -27,24 +34,14 @@ class User extends Authenticatable
         'email',
         'password',
         'address',
-        'role'
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -61,18 +58,18 @@ class User extends Authenticatable
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'address' => 'required|string|max:255',
-            'role' => 'required|string|in:client,admin'
+            'role' => 'required|string|in:client,admin',
         ]);
     }
-    
-     public function orders(): HasMany
+
+    public function orders(): HasMany
     {
-        return $this->hasMany(Order::class, 'client_id');
+        return $this->hasMany(Order::class, 'user_id');
     }
-    
+
     public function getFullName(): string
     {
-        return $this->name . ' ' . $this->last_name;
+        return $this->name.' '.$this->last_name;
     }
 
     public function isAdmin(): bool
@@ -90,7 +87,9 @@ class User extends Authenticatable
         return $this->role === null;
     }
 
-    public function getOrders(): HasMany
+    // Getters for related models
+
+    public function getOrders(): EloquentCollection
     {
         return $this->orders;
     }
