@@ -18,7 +18,7 @@
     @endif
 
     <form method="GET" action="{{ route('collections.index') }}" class="card p-3 mb-5 border-0 shadow-sm">
-        <div class="row g-2">
+        <div class="row g-2 justify-content-center">
             <div class="col-md-5">
                 <input
                     type="text"
