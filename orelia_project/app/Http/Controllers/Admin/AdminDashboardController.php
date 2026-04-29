@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
         $totalUsers = User::where('role', 'client')->count();
         $totalCollections = Collection::count();
         $totalMaterials = Material::count();
-        $recentOrders = Order::with('client')->latest()->take(5)->get();
+        $recentOrders = Order::with('user')->latest()->take(5)->get();
         $topPieces = OrderItem::with('piece')
             ->selectRaw('piece_id, SUM(quantity) as total_sold')
             ->groupBy('piece_id')

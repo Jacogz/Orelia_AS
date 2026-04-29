@@ -7,20 +7,81 @@
         <h2>{{ $viewData['title'] }}</h2>
     </div>
 
-    <form method="GET" action="{{ route('pieces.index') }}" class="text-center mb-5">
-        @if(request('name'))
-            <p class="text-uppercase small letter-spacing mb-3">{{ __('pieces.results_for') }} &ldquo;{{ request('name') }}&rdquo;</p>
-        @endif
-        <div class="d-inline-flex border-bottom border-dark" style="width: 480px">
-            <input
-                type="text"
-                name="name"
-                class="form-control border-0 shadow-none"
-                value="{{ request('name') }}"
-                placeholder="{{ $viewData['subtitle'] }}"
-                autocomplete="off"
-            />
-            <button type="submit" class="btn btn-dark rounded-0 px-4">{{ __('general.search') }}</button>
+    @if($errors->any())
+        <div class="alert alert-danger mb-4">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="GET" action="{{ route('pieces.index') }}" class="card p-3 mb-5 border-0 shadow-sm">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="{{ __('pieces.name') }}"
+                    value="{{ request('name') }}"
+                />
+            </div>
+            <div class="col-md-2">
+                <select name="type" class="form-select">
+                    <option value="">{{ __('pieces.all_types') }}</option>
+                    @foreach ($viewData['types'] as $type)
+                        <option value="{{ $type }}" {{ request('type') == $type ? 'selected' : '' }}>
+                            {{ $type }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="collection_id" class="form-select">
+                    <option value="">{{ __('pieces.all_collections') }}</option>
+                    @foreach ($viewData['collections'] as $collection)
+                        <option value="{{ $collection->getId() }}" {{ request('collection_id') == $collection->getId() ? 'selected' : '' }}>
+                            {{ $collection->getName() }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input
+                    type="number"
+                    name="min_price"
+                    class="form-control"
+                    placeholder="{{ __('pieces.min_price') }}"
+                    value="{{ request('min_price') }}"
+                    min="0"
+                />
+            </div>
+            <div class="col-md-1">
+                <input
+                    type="number"
+                    name="max_price"
+                    class="form-control"
+                    placeholder="{{ __('pieces.max_price') }}"
+                    value="{{ request('max_price') }}"
+                    min="0"
+                />
+            </div>
+            <div class="col-md-2">
+                <select name="stock" class="form-select">
+                    <option value="">{{ __('pieces.all_stock') }}</option>
+                    <option value="available" {{ request('stock') == 'available' ? 'selected' : '' }}>
+                        {{ __('pieces.in_stock') }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-dark w-100">{{ __('general.filter') }}</button>
+            </div>
+            <div class="col-md-1">
+                <a href="{{ route('pieces.index') }}" class="btn btn-outline-secondary w-100">{{ __('general.clear') }}</a>
+            </div>
         </div>
     </form>
 
@@ -37,7 +98,6 @@
                             class="w-100"
                             style="aspect-ratio:1/1; object-fit:cover; display:block"
                         >
-                        {{-- Button revealed on hover to keep grid uncluttered --}}
                         <div class="position-absolute bottom-0 start-0 end-0 p-3 orelia-overlay">
                             @if($piece->getStock() > 0)
                                 <form action="{{ route('cart.add', $piece->getId()) }}" method="POST">
@@ -50,7 +110,9 @@
                         </div>
                     </div>
                     <div class="text-center mt-2">
-                        <a href="{{ route('pieces.show', $piece->getId()) }}" class="d-block text-uppercase small fw-semibold text-dark text-decoration-none">{{ $piece->getName() }}</a>
+                        <a href="{{ route('pieces.show', $piece->getId()) }}" class="d-block text-uppercase small fw-semibold text-dark text-decoration-none">
+                            {{ $piece->getName() }}
+                        </a>
                         <span class="d-block text-muted small">{{ $piece->getCollection()->getName() }}</span>
                         <span class="d-block small">${{ number_format($piece->getPrice(), 2) }}</span>
                     </div>

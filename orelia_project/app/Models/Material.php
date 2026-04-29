@@ -33,12 +33,14 @@ class Material extends Model
     public static function validate(Request $request): array
     {
         return $request->validate([
-            'name' => 'required|string|max:30|min:3',
+            'name' => 'required|string|min:3|max:30',
             'type' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'color' => 'required|string|max:30|min:3',
+            'color' => 'required|string|min:3|max:30',
         ]);
     }
+
+    // Getters & setters
 
     public function getId(): int
     {
@@ -85,13 +87,29 @@ class Material extends Model
         $this->attributes['color'] = $color;
     }
 
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
+    // Relations
+
     public function pieces(): BelongsToMany
     {
-        return $this->belongsToMany(Piece::class);
+        return $this->belongsToMany(Piece::class, 'piece_material');
     }
+
+    // Relation getters
 
     public function getPieces(): EloquentCollection
     {
-        return $this->pieces;
+        return $this->relationLoaded('pieces')
+            ? $this->relations['pieces']
+            : $this->pieces()->get();
     }
 }
