@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,13 @@ class CartController extends Controller
         $cartData = $request->session()->get('cart', []);
 
         if ($cartData) {
+            $pieceIds = array_keys($cartData);
+            $pieces = Piece::whereIn('id', $pieceIds)->get();
+            $piecesMap = $pieces->keyBy('id');
+
             foreach ($cartData as $pieceId => $quantity) {
-                $piece = Piece::find($pieceId);
-                if ($piece) {
+                if (isset($piecesMap[$pieceId])) {
+                    $piece = $piecesMap[$pieceId];
                     $subtotal = $piece->getPrice() * $quantity;
                     $cartItems[$pieceId] = [
                         'piece' => $piece,
@@ -46,18 +51,15 @@ class CartController extends Controller
 
     public function add(string $id, Request $request): RedirectResponse
     {
-        $piece = Piece::find($id);
-
-        if (! $piece) {
-            return back()->with('error', __('cart.piece_not_found'));
-        }
+        $validationData = OrderItem::validateCartAdd($request, $id);
+        $pieceId = $validationData['piece_id'];
 
         $cart = $request->session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]++;
+        if (isset($cart[$pieceId])) {
+            $cart[$pieceId]++;
         } else {
-            $cart[$id] = 1;
+            $cart[$pieceId] = 1;
         }
 
         $request->session()->put('cart', $cart);
@@ -67,20 +69,16 @@ class CartController extends Controller
 
     public function update(string $id, Request $request): RedirectResponse
     {
-        $quantity = $request->input('quantity', 1);
+        $validationData = OrderItem::validateCartUpdate($request, $id);
+        $pieceId = $validationData['piece_id'];
+        $quantity = $validationData['quantity'];
 
         if ($quantity < 1) {
-            return $this->remove($id, $request);
-        }
-
-        $piece = Piece::find($id);
-
-        if (! $piece) {
-            return back()->with('error', __('cart.piece_not_found'));
+            return $this->remove((string) $pieceId, $request);
         }
 
         $cart = $request->session()->get('cart', []);
-        $cart[$id] = $quantity;
+        $cart[$pieceId] = $quantity;
         $request->session()->put('cart', $cart);
 
         return back()->with('success', __('cart.updated'));
@@ -111,23 +109,25 @@ class CartController extends Controller
             return back()->with('error', __('cart.empty'));
         }
 
-        $order = new Order;
-        $order->fill([
-            'client_id' => $user->id,
-            'total' => 0,
-            'status' => 'pending',
-            'payment_method' => 'pending',
-            'payment_status' => 'pending',
-        ]);
-        $order->save();
+        $cartData = OrderItem::validateCartCheckout($cartData);
 
-        $total = 0;
+        try {
+            $pieceIds = array_keys($cartData);
+            $pieces = Piece::whereIn('id', $pieceIds)->get();
+            $piecesMap = $pieces->keyBy('id');
+            $order = new Order;
+            $order->fill([
+                'client_id' => $user->getId(),
+                'total' => 0,
+                'status' => 'pending',
+                'payment_method' => 'pending',
+                'payment_status' => 'pending',
+            ]);
+            $order->save();
 
-        foreach ($cartData as $pieceId => $quantity) {
-            $piece = Piece::find($pieceId);
-
-            if ($piece) {
-                $subtotal = $piece->getPrice() * $quantity;
+            $total = 0;
+            foreach ($cartData as $pieceId => $quantity) {
+                $piece = $piecesMap[$pieceId];
 
                 $orderItem = new OrderItem;
                 $orderItem->fill([
@@ -135,19 +135,23 @@ class CartController extends Controller
                     'piece_id' => $piece->getId(),
                     'unit_price' => $piece->getPrice(),
                     'quantity' => $quantity,
-                    'subtotal' => $subtotal,
                 ]);
+                $orderItem->setSubtotal($orderItem->calculateSubtotal());
                 $orderItem->save();
 
-                $total += $subtotal;
+                $total += $orderItem->getSubtotal();
             }
+
+            $order->fill(['total' => $total]);
+            $order->save();
+
+            $request->session()->forget('cart');
+
+            return redirect()->route('cart.index')->with('success', __('cart.order_created'));
+        } catch (QueryException $e) {
+            return back()->with('error', __('cart.order_failed'));
+        } catch (\Exception $e) {
+            return back()->with('error', __('cart.order_failed'));
         }
-
-        $order->fill(['total' => $total]);
-        $order->save();
-
-        $request->session()->forget('cart');
-
-        return redirect()->route('cart.index')->with('success', __('cart.order_created'));
     }
 }

@@ -23,4 +23,6 @@ return [
     'cleared' => 'Cart cleared.',
     'empty' => 'Cart is empty.',
     'order_created' => 'Order created successfully.',
+    'order_failed' => 'There was an error creating the order. Please try again.',
+    'invalid_quantity' => 'The quantity must be at least 1.',
 ];

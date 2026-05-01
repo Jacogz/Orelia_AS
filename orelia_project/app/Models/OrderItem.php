@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class OrderItem extends Model
 {
@@ -43,15 +44,7 @@ class OrderItem extends Model
         ]);
     }
 
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
-
-    public function piece(): BelongsTo
-    {
-        return $this->belongsTo(Piece::class, 'piece_id');
-    }
+    // Getters and setters
 
     public function getId(): int
     {
@@ -63,19 +56,14 @@ class OrderItem extends Model
         return $this->attributes['unit_price'];
     }
 
-    public function getQuantity(): int
-    {
-        return $this->attributes['quantity'];
-    }
-
-    public function getSubtotal(): int
-    {
-        return $this->attributes['subtotal'];
-    }
-
     public function setUnitPrice(int $unitPrice): void
     {
         $this->attributes['unit_price'] = $unitPrice;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->attributes['quantity'];
     }
 
     public function setQuantity(int $quantity): void
@@ -83,17 +71,36 @@ class OrderItem extends Model
         $this->attributes['quantity'] = $quantity;
     }
 
+    public function getSubtotal(): int
+    {
+        return $this->attributes['subtotal'];
+    }
+
     public function setSubtotal(int $subtotal): void
     {
         $this->attributes['subtotal'] = $subtotal;
     }
+
+    // Model methods
 
     public function calculateSubtotal(): int
     {
         return $this->getUnitPrice() * $this->getQuantity();
     }
 
-    // Getters for related models
+    // Relationships
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function piece(): BelongsTo
+    {
+        return $this->belongsTo(Piece::class, 'piece_id');
+    }
+
+    // Relationship getters
 
     public function getOrder(): Order
     {
@@ -103,5 +110,54 @@ class OrderItem extends Model
     public function getPiece(): Piece
     {
         return $this->piece;
+    }
+
+    // Cart validation methods
+
+    public static function validateCartAdd(Request $request, string $pieceId): array
+    {
+        $request->merge([
+            'piece_id' => $pieceId,
+        ]);
+
+        return $request->validate([
+            'piece_id' => 'required|integer|exists:pieces,id',
+        ]);
+    }
+
+    public static function validateCartUpdate(Request $request, string $pieceId): array
+    {
+        $request->merge([
+            'piece_id' => $pieceId,
+        ]);
+
+        return $request->validate([
+            'piece_id' => 'required|integer|exists:pieces,id',
+            'quantity' => 'required|integer|min:0',
+        ]);
+    }
+
+    public static function validateCartCheckout(array $cartData): array
+    {
+        $validationData = [];
+
+        foreach ($cartData as $pieceId => $quantity) {
+            $validationData[] = [
+                'piece_id' => $pieceId,
+                'quantity' => $quantity,
+            ];
+        }
+
+        $validatedItems = Validator::make($validationData, [
+            '*.piece_id' => 'required|integer|exists:pieces,id',
+            '*.quantity' => 'required|integer|min:1',
+        ])->validate();
+
+        $cartValidationData = [];
+        foreach ($validatedItems as $item) {
+            $cartValidationData[$item['piece_id']] = $item['quantity'];
+        }
+
+        return $cartValidationData;
     }
 }

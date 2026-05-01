@@ -23,4 +23,6 @@ return [
     'cleared' => 'Carrito vaciado.',
     'empty' => 'El carrito está vacío.',
     'order_created' => 'Pedido creado correctamente.',
+    'order_failed' => 'Hubo un error al crear el pedido. Por favor, intenta de nuevo.',
+    'invalid_quantity' => 'La cantidad debe ser al menos 1.',
 ];
