@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             $orderCount = fake()->numberBetween(2, 4);
 
             for ($i = 0; $i < $orderCount; $i++) {
-                $order = Order::factory()->create(['client_id' => $client->id]);
+                $order = Order::factory()->create(['user_id' => $client->id]);
 
                 $itemCount = fake()->numberBetween(1, 4);
                 $selectedPieces = $allPieces->random($itemCount);

@@ -10,8 +10,8 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'client_id' => User::factory()->client(),
-            'total' => 0, // recalculated after items are attached in the seeder
+            'user_id' => User::factory()->client(),
+            'total' => 0, // recalculated after items are attached in te seeder
             'status' => fake()->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
             'payment_method' => fake()->randomElement(['credit_card', 'debit_card', 'paypal', 'bank_transfer']),
             'payment_status' => fake()->randomElement(['pending', 'paid', 'failed', 'refunded']),

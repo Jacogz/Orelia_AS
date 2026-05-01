@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('payment_method');
             $table->string('payment_status')->default('pending');
-            $table->foreignId('client_id')->constrained('users')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->timestamps();
         });
     }
