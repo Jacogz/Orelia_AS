@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class OrderItem extends Model
 {
@@ -110,54 +109,5 @@ class OrderItem extends Model
     public function getPiece(): Piece
     {
         return $this->piece;
-    }
-
-    // Cart validation methods
-
-    public static function validateCartAdd(Request $request, string $pieceId): array
-    {
-        $request->merge([
-            'piece_id' => $pieceId,
-        ]);
-
-        return $request->validate([
-            'piece_id' => 'required|integer|exists:pieces,id',
-        ]);
-    }
-
-    public static function validateCartUpdate(Request $request, string $pieceId): array
-    {
-        $request->merge([
-            'piece_id' => $pieceId,
-        ]);
-
-        return $request->validate([
-            'piece_id' => 'required|integer|exists:pieces,id',
-            'quantity' => 'required|integer|min:0',
-        ]);
-    }
-
-    public static function validateCartCheckout(array $cartData): array
-    {
-        $validationData = [];
-
-        foreach ($cartData as $pieceId => $quantity) {
-            $validationData[] = [
-                'piece_id' => $pieceId,
-                'quantity' => $quantity,
-            ];
-        }
-
-        $validatedItems = Validator::make($validationData, [
-            '*.piece_id' => 'required|integer|exists:pieces,id',
-            '*.quantity' => 'required|integer|min:1',
-        ])->validate();
-
-        $cartValidationData = [];
-        foreach ($validatedItems as $item) {
-            $cartValidationData[$item['piece_id']] = $item['quantity'];
-        }
-
-        return $cartValidationData;
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class CartController extends Controller
@@ -46,12 +47,15 @@ class CartController extends Controller
         $viewData['cartItems'] = $cartItems;
         $viewData['total'] = $total;
 
-        return view('cart.index')->with('viewData', $viewData);
+        return view('user.cart.index')->with('viewData', $viewData);
     }
 
     public function add(string $id, Request $request): RedirectResponse
     {
-        $validationData = OrderItem::validateCartAdd($request, $id);
+        $request->merge(['piece_id' => $id]);
+        $validationData = $request->validate([
+            'piece_id' => 'required|integer|exists:pieces,id',
+        ]);
         $pieceId = $validationData['piece_id'];
 
         $cart = $request->session()->get('cart', []);
@@ -69,7 +73,11 @@ class CartController extends Controller
 
     public function update(string $id, Request $request): RedirectResponse
     {
-        $validationData = OrderItem::validateCartUpdate($request, $id);
+        $request->merge(['piece_id' => $id]);
+        $validationData = $request->validate([
+            'piece_id' => 'required|integer|exists:pieces,id',
+            'quantity' => 'required|integer|min:0',
+        ]);
         $pieceId = $validationData['piece_id'];
         $quantity = $validationData['quantity'];
 
@@ -109,7 +117,23 @@ class CartController extends Controller
             return back()->with('error', __('cart.empty'));
         }
 
-        $cartData = OrderItem::validateCartCheckout($cartData);
+        $validationData = [];
+        foreach ($cartData as $pieceId => $quantity) {
+            $validationData[] = [
+                'piece_id' => $pieceId,
+                'quantity' => $quantity,
+            ];
+        }
+
+        $validatedItems = Validator::make($validationData, [
+            '*.piece_id' => 'required|integer|exists:pieces,id',
+            '*.quantity' => 'required|integer|min:1',
+        ])->validate();
+
+        $cartData = [];
+        foreach ($validatedItems as $item) {
+            $cartData[$item['piece_id']] = $item['quantity'];
+        }
 
         try {
             $pieceIds = array_keys($cartData);
@@ -142,7 +166,7 @@ class CartController extends Controller
                 $total += $orderItem->getSubtotal();
             }
 
-            $order->fill(['total' => $total]);
+            $order->setTotal($total);
             $order->save();
 
             $request->session()->forget('cart');
@@ -150,8 +174,5 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('success', __('cart.order_created'));
         } catch (QueryException $e) {
             return back()->with('error', __('cart.order_failed'));
-        } catch (\Exception $e) {
-            return back()->with('error', __('cart.order_failed'));
-        }
     }
 }
