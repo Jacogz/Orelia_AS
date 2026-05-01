@@ -62,35 +62,118 @@ class User extends Authenticatable
         ]);
     }
 
+    // Getters & setters
+
+    public function getId(): int
+    {
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->attributes['last_name'];
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->attributes['last_name'] = $lastName;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->attributes['email'];
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->attributes['email'] = $email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->attributes['password'];
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->attributes['password'] = $password;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->attributes['address'];
+    }
+
+    public function setAddress(string $address): void
+    {
+        $this->attributes['address'] = $address;
+    }
+
+    public function getRole(): string
+    {
+        return $this->attributes['role'];
+    }
+
+    public function setRole(string $role): void
+    {
+        $this->attributes['role'] = $role;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
+    // Relations
+
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class, 'user_id');
+        return $this->hasMany(Order::class);
     }
+
+    // Relation getters
+
+    public function getOrders(): EloquentCollection
+    {
+        return $this->relationLoaded('orders')
+            ? $this->relations['orders']
+            : $this->orders()->get();
+    }
+
+    // Model methods
 
     public function getFullName(): string
     {
-        return $this->name.' '.$this->last_name;
+        return $this->getName().' '.$this->getLastName();
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->getRole() === 'admin';
     }
 
     public function isClient(): bool
     {
-        return $this->role === 'client';
+        return $this->getRole() === 'client';
     }
 
     public function isGuest(): bool
     {
-        return $this->role === null;
-    }
-
-    // Getters for related models
-
-    public function getOrders(): EloquentCollection
-    {
-        return $this->orders;
+        return $this->getRole() === null;
     }
 }

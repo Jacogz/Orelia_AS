@@ -90,31 +90,39 @@ class Order extends Model
         $this->attributes['payment_status'] = $paymentStatus;
     }
 
+    public function getUserId(): int
+    {
+        return $this->attributes['user_id'];
+    }
+
+    public function setUserId(int $userId): void
+    {
+        $this->attributes['user_id'] = $userId;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->relationLoaded('user') ? $this->relations['user'] : $this->user()->first();
+    }
+
+    public function getOrderItems(): EloquentCollection
+    {
+        return $this->relationLoaded('orderItems') ? $this->relations['orderItems'] : $this->orderItems()->get();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    // Getters for related models
-
-    public function getOrderItems(): EloquentCollection
-    {
-        return $this->order_items;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
     public function addOrderItem(OrderItem $orderItem): void
     {
-        $orderItem->order_id = $this->getId();
+        $orderItem->setOrderId($this->getId());
         $orderItem->save();
     }
 

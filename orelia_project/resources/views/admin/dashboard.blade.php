@@ -81,7 +81,7 @@
                     @forelse ($viewData['recentOrders'] as $order)
                     <tr>
                         <td>{{ $order->id }}</td>
-                        <td>{{ $order->getClient()->getFullName() }}</td>
+                        <td>{{ $order->getUser()?->getFullName() ?? 'N/A' }}</td>
                         <td>${{ number_format($order->total, 0) }}</td>
                         <td>
                             <span class="badge

@@ -17,10 +17,6 @@ class CollectionController extends Controller
             $query->where('name', 'like', '%'.$request->name.'%');
         }
 
-        if ($request->filled('description')) {
-            $query->where('description', 'like', '%'.$request->description.'%');
-        }
-
         $collections = $query->get();
 
         $viewData = [];

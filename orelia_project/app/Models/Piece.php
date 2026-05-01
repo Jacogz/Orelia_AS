@@ -21,7 +21,7 @@ class Piece extends Model
      * $this->attributes['id'] - int - contains the piece primary key
      * $this->attributes['name'] - string - contains the piece name
      * $this->attributes['description'] - string - contains the piece description
-     * $this->attributes['price'] - int - contains the piece price
+     * $this->attributes['price'] - float - contains the piece price
      * $this->attributes['type'] - string - contains the piece type
      * $this->attributes['image_url'] - string - contains the piece image URL
      * $this->attributes['stock'] - int - contains the piece stock
@@ -32,7 +32,7 @@ class Piece extends Model
      * $this->attributes['collection_id'] - int - contains the piece collection foreign key
      * $this->collection - Collection - contains the piece collection object
      * $this->materials - Material[] - contains the piece materials list
-     * $this->order_items - OrderItem[] - contains the piece order items list
+     * $this->orderItems - OrderItem[] - contains the piece order items list
      */
     protected $fillable = [
         'name',
@@ -60,6 +60,8 @@ class Piece extends Model
             'collection_id' => 'required|integer|exists:collections,id',
         ]);
     }
+
+    // Getters & setters
 
     public function getId(): int
     {
@@ -146,6 +148,18 @@ class Piece extends Model
         $this->attributes['weight'] = $weight;
     }
 
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
+    // FK getters & setters
+
     public function getCollectionId(): int
     {
         return $this->attributes['collection_id'];
@@ -156,7 +170,7 @@ class Piece extends Model
         $this->attributes['collection_id'] = $collectionId;
     }
 
-    // Relationship definitions
+    // Relations
 
     public function collection(): BelongsTo
     {
@@ -173,20 +187,26 @@ class Piece extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Relationship getters
+    // Relation getters
 
     public function getCollection(): Collection
     {
-        return $this->collection;
+        return $this->relationLoaded('collection')
+            ? $this->relations['collection']
+            : $this->collection()->first();
     }
 
     public function getMaterials(): EloquentCollection
     {
-        return $this->materials;
+        return $this->relationLoaded('materials')
+            ? $this->relations['materials']
+            : $this->materials()->get();
     }
 
     public function getOrderItems(): EloquentCollection
     {
-        return $this->order_items;
+        return $this->relationLoaded('orderItems')
+            ? $this->relations['orderItems']
+            : $this->orderItems()->get();
     }
 }

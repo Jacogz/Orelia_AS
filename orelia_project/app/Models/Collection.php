@@ -59,6 +59,16 @@ class Collection extends Model
         $this->attributes['description'] = $description;
     }
 
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
     public function pieces(): HasMany
     {
         return $this->hasMany(Piece::class);
