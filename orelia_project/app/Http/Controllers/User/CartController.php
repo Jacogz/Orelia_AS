@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cart\AddToCartRequest;
+use App\Http\Requests\Cart\CheckoutRequest;
+use App\Http\Requests\Cart\UpdateCartItemRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
@@ -10,7 +13,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class CartController extends Controller
@@ -50,12 +52,9 @@ class CartController extends Controller
         return view('user.cart.index')->with('viewData', $viewData);
     }
 
-    public function add(string $id, Request $request): RedirectResponse
+    public function add(string $id, AddToCartRequest $request): RedirectResponse
     {
-        $request->merge(['piece_id' => $id]);
-        $validationData = $request->validate([
-            'piece_id' => 'required|integer|exists:pieces,id',
-        ]);
+        $validationData = $request->validated();
         $pieceId = $validationData['piece_id'];
 
         $cart = $request->session()->get('cart', []);
@@ -68,16 +67,12 @@ class CartController extends Controller
 
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', __('cart.product_added'));
+        return redirect()->route('cart.index')->with('success', __('cart.product_added'));
     }
 
-    public function update(string $id, Request $request): RedirectResponse
+    public function update(string $id, UpdateCartItemRequest $request): RedirectResponse
     {
-        $request->merge(['piece_id' => $id]);
-        $validationData = $request->validate([
-            'piece_id' => 'required|integer|exists:pieces,id',
-            'quantity' => 'required|integer|min:0',
-        ]);
+        $validationData = $request->validated();
         $pieceId = $validationData['piece_id'];
         $quantity = $validationData['quantity'];
 
@@ -89,7 +84,7 @@ class CartController extends Controller
         $cart[$pieceId] = $quantity;
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', __('cart.updated'));
+        return redirect()->route('cart.index')->with('success', __('cart.updated'));
     }
 
     public function remove(string $id, Request $request): RedirectResponse
@@ -98,42 +93,20 @@ class CartController extends Controller
         unset($cart[$id]);
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', __('cart.product_removed'));
+        return redirect()->route('cart.index')->with('success', __('cart.product_removed'));
     }
 
     public function removeAll(Request $request): RedirectResponse
     {
         $request->session()->forget('cart');
 
-        return back()->with('success', __('cart.cleared'));
+        return redirect()->route('cart.index')->with('success', __('cart.cleared'));
     }
 
-    public function checkout(Request $request): RedirectResponse
+    public function checkout(CheckoutRequest $request): RedirectResponse
     {
         $user = Auth::user();
-        $cartData = $request->session()->get('cart', []);
-
-        if (empty($cartData)) {
-            return back()->with('error', __('cart.empty'));
-        }
-
-        $validationData = [];
-        foreach ($cartData as $pieceId => $quantity) {
-            $validationData[] = [
-                'piece_id' => $pieceId,
-                'quantity' => $quantity,
-            ];
-        }
-
-        $validatedItems = Validator::make($validationData, [
-            '*.piece_id' => 'required|integer|exists:pieces,id',
-            '*.quantity' => 'required|integer|min:1',
-        ])->validate();
-
-        $cartData = [];
-        foreach ($validatedItems as $item) {
-            $cartData[$item['piece_id']] = $item['quantity'];
-        }
+        $cartData = $request->validatedCart();
 
         try {
             $pieceIds = array_keys($cartData);
@@ -173,6 +146,7 @@ class CartController extends Controller
 
             return redirect()->route('cart.index')->with('success', __('cart.order_created'));
         } catch (QueryException $e) {
-            return back()->with('error', __('cart.order_failed'));
+            return redirect()->route('cart.index')->with('error', __('cart.order_failed'));
+        }
     }
 }

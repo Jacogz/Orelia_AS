@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\Request;
 
 class Order extends Model
 {
@@ -33,17 +32,6 @@ class Order extends Model
         'payment_method',
         'payment_status',
     ];
-
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'total' => 'required|numeric|min:0',
-            'status' => 'required|string|max:255',
-            'payment_method' => 'required|string|max:255',
-            'payment_status' => 'required|string|max:255',
-            'user_id' => 'required|integer|exists:users,id',
-        ]);
-    }
 
     public function getId(): int
     {

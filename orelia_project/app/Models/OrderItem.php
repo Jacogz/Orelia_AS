@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\Request;
 
 class OrderItem extends Model
 {
@@ -31,17 +30,6 @@ class OrderItem extends Model
         'order_id',
         'piece_id',
     ];
-
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'unit_price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
-            'subtotal' => 'required|numeric|min:0',
-            'order_id' => 'required|integer|exists:orders,id',
-            'piece_id' => 'required|integer|exists:pieces,id',
-        ]);
-    }
 
     // Getters and setters
 

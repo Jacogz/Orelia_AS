@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\Request;
 
 class Piece extends Model
 {
@@ -45,21 +44,6 @@ class Piece extends Model
         'weight',
         'collection_id',
     ];
-
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'type' => 'required|string|max:255',
-            'image_url' => 'nullable|url',
-            'stock' => 'required|integer|min:0',
-            'size' => 'nullable|string|max:255',
-            'weight' => 'nullable|numeric|min:0',
-            'collection_id' => 'required|integer|exists:collections,id',
-        ]);
-    }
 
     // Getters & setters
 

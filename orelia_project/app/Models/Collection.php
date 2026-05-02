@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\Request;
 
 class Collection extends Model
 {
@@ -25,14 +24,6 @@ class Collection extends Model
         'name',
         'description',
     ];
-
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|string|max:30',
-            'description' => 'nullable|string|max:255',
-        ]);
-    }
 
     public function getId(): int
     {

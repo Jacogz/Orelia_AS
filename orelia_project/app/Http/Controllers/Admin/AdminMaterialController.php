@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Material\StoreMaterialRequest;
+use App\Http\Requests\Admin\Material\UpdateMaterialRequest;
 use App\Models\Material;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
@@ -46,9 +48,9 @@ class AdminMaterialController extends Controller
         return view('admin.materials.create')->with('viewData', $viewData);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreMaterialRequest $request): RedirectResponse
     {
-        $validationData = Material::validate($request);
+        $validationData = $request->validated();
 
         try {
             $material = new Material;
@@ -74,9 +76,9 @@ class AdminMaterialController extends Controller
         return view('admin.materials.edit')->with('viewData', $viewData);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdateMaterialRequest $request, string $id): RedirectResponse
     {
-        $validationData = Material::validate($request);
+        $validationData = $request->validated();
 
         try {
             $material = Material::findOrFail($id);

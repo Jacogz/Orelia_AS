@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Http\Request;
 
 class Material extends Model
 {
@@ -29,16 +28,6 @@ class Material extends Model
         'description',
         'color',
     ];
-
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|string|min:3|max:30',
-            'type' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'color' => 'required|string|min:3|max:30',
-        ]);
-    }
 
     // Getters & setters
 
