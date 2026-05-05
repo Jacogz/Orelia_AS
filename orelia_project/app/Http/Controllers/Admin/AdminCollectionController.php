@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Collection\StoreCollectionRequest;
+use App\Http\Requests\Admin\Collection\UpdateCollectionRequest;
 use App\Models\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
@@ -16,11 +18,11 @@ class AdminCollectionController extends Controller
         $query = Collection::query();
 
         if ($request->filled('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
 
         if ($request->filled('description')) {
-            $query->where('description', 'like', '%'.$request->description.'%');
+            $query->where('description', 'like', '%' . $request->description . '%');
         }
 
         $collections = $query->get();
@@ -40,9 +42,9 @@ class AdminCollectionController extends Controller
         return view('admin.collections.create')->with('viewData', $viewData);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCollectionRequest $request): RedirectResponse
     {
-        $validationData = Collection::validate($request);
+        $validationData = $request->validated();
 
         try {
             $collection = new Collection;
@@ -68,9 +70,9 @@ class AdminCollectionController extends Controller
         return view('admin.collections.edit')->with('viewData', $viewData);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdateCollectionRequest $request, string $id): RedirectResponse
     {
-        $validationData = Collection::validate($request);
+        $validationData = $request->validated();
 
         try {
             $collection = Collection::findOrFail($id);

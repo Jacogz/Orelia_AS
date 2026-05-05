@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Piece\StorePieceRequest;
+use App\Http\Requests\Admin\Piece\UpdatePieceRequest;
 use App\Models\Collection;
 use App\Models\Piece;
 use Illuminate\Database\QueryException;
@@ -64,9 +66,9 @@ class AdminPieceController extends Controller
         return view('admin.pieces.create')->with('viewData', $viewData);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StorePieceRequest $request): RedirectResponse
     {
-        $validationData = Piece::validate($request);
+        $validationData = $request->validated();
 
         try {
             $piece = new Piece;
@@ -94,9 +96,9 @@ class AdminPieceController extends Controller
         return view('admin.pieces.edit')->with('viewData', $viewData);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdatePieceRequest $request, string $id): RedirectResponse
     {
-        $validationData = Piece::validate($request);
+        $validationData = $request->validated();
 
         try {
             $piece = Piece::findOrFail($id);

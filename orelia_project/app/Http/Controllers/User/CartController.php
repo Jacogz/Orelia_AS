@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cart\AddToCartRequest;
+use App\Http\Requests\Cart\CheckoutRequest;
+use App\Http\Requests\Cart\UpdateCartItemRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,21 +17,6 @@ use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    /**
-     * CART ATTRIBUTES
-     * - Manages the shopping cart for authenticated users
-     * - Stores piece IDs and quantities in session
-     * - Relates to database models: Piece, Order, OrderItem
-     */
-    // Está duplicado
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Display the shopping cart.
-     */
     public function index(Request $request): View
     {
         $cartItems = [];
@@ -36,10 +25,14 @@ class CartController extends Controller
         $cartData = $request->session()->get('cart', []);
 
         if ($cartData) {
+            $pieceIds = array_keys($cartData);
+            $pieces = Piece::whereIn('id', $pieceIds)->get();
+            $piecesMap = $pieces->keyBy('id');
+
             foreach ($cartData as $pieceId => $quantity) {
-                $piece = Piece::find($pieceId);
-                if ($piece) {
-                    $subtotal = $piece->price * $quantity;
+                if (isset($piecesMap[$pieceId])) {
+                    $piece = $piecesMap[$pieceId];
+                    $subtotal = $piece->getPrice() * $quantity;
                     $cartItems[$pieceId] = [
                         'piece' => $piece,
                         'quantity' => $quantity,
@@ -51,133 +44,109 @@ class CartController extends Controller
         }
 
         $viewData = [];
-        // Falta lang
-        $viewData['title'] = 'Cart - Orelia';
-        $viewData['subtitle'] = 'Shopping Cart';
+        $viewData['title'] = __('cart.title');
+        $viewData['subtitle'] = __('cart.subtitle');
         $viewData['cartItems'] = $cartItems;
         $viewData['total'] = $total;
 
         return view('user.cart.index')->with('viewData', $viewData);
     }
 
-    // Comentario duplica codigo
-    /**
-     * Add a piece to the cart.
-     */
-    public function add(string $id, Request $request): RedirectResponse
+    public function add(string $id, AddToCartRequest $request): RedirectResponse
     {
-        $piece = Piece::find($id);
-
-        if (! $piece) {
-            return back()->with('error', 'Piece not found');
-        }
+        $validationData = $request->validated();
+        $pieceId = $validationData['piece_id'];
 
         $cart = $request->session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]++;
+        if (isset($cart[$pieceId])) {
+            $cart[$pieceId]++;
         } else {
-            $cart[$id] = 1;
+            $cart[$pieceId] = 1;
         }
 
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Product added to cart');
+        return redirect()->route('cart.index')->with('success', __('cart.product_added'));
     }
 
-    /**
-     * Update the quantity of a piece in the cart.
-     */
-    public function update(string $id, Request $request): RedirectResponse
+    public function update(string $id, UpdateCartItemRequest $request): RedirectResponse
     {
-        $quantity = $request->input('quantity', 1);
+        $validationData = $request->validated();
+        $pieceId = $validationData['piece_id'];
+        $quantity = $validationData['quantity'];
 
         if ($quantity < 1) {
-            return $this->remove($id, $request);
-        }
-
-        $piece = Piece::find($id);
-
-        if (! $piece) {
-            return back()->with('error', 'Piece not found');
+            return $this->remove((string) $pieceId, $request);
         }
 
         $cart = $request->session()->get('cart', []);
-        $cart[$id] = $quantity;
+        $cart[$pieceId] = $quantity;
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Cart updated');
+        return redirect()->route('cart.index')->with('success', __('cart.updated'));
     }
 
-    /**
-     * Remove a piece from the cart.
-     */
     public function remove(string $id, Request $request): RedirectResponse
     {
         $cart = $request->session()->get('cart', []);
         unset($cart[$id]);
         $request->session()->put('cart', $cart);
 
-        return back()->with('success', 'Product removed from cart');
+        return redirect()->route('cart.index')->with('success', __('cart.product_removed'));
     }
 
-    /**
-     * Clear all items from the cart.
-     */
     public function removeAll(Request $request): RedirectResponse
     {
         $request->session()->forget('cart');
 
-        return back()->with('success', 'Cart cleared');
+        return redirect()->route('cart.index')->with('success', __('cart.cleared'));
     }
 
-    /**
-     * Checkout: Create an Order from cart items.
-     */
-    public function checkout(Request $request): RedirectResponse
+    public function checkout(CheckoutRequest $request): RedirectResponse
     {
         $user = Auth::user();
-        $cartData = $request->session()->get('cart', []);
+        $cartData = $request->validatedCart();
 
-        if (empty($cartData)) {
-            return back()->with('error', 'Cart is empty');
-        }
+        try {
+            $pieceIds = array_keys($cartData);
+            $pieces = Piece::whereIn('id', $pieceIds)->get();
+            $piecesMap = $pieces->keyBy('id');
+            $order = new Order;
+            $order->fill([
+                'client_id' => $user->getId(),
+                'total' => 0,
+                'status' => 'pending',
+                'payment_method' => 'pending',
+                'payment_status' => 'pending',
+            ]);
+            $order->save();
 
-        //  Estándar fill
-        $order = Order::create([
-            'client_id' => $user->id,
-            'total' => 0,
-            'status' => 'pending',
-            'payment_method' => 'pending',
-            'payment_status' => 'pending',
-        ]);
+            $total = 0;
+            foreach ($cartData as $pieceId => $quantity) {
+                $piece = $piecesMap[$pieceId];
 
-        $total = 0;
-
-        foreach ($cartData as $pieceId => $quantity) {
-            $piece = Piece::find($pieceId);
-
-            if ($piece) {
-                // getter
-                $subtotal = $piece->price * $quantity;
-
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'piece_id' => $pieceId,
-                    'unit_price' => $piece->price,
+                $orderItem = new OrderItem;
+                $orderItem->fill([
+                    'order_id' => $order->getId(),
+                    'piece_id' => $piece->getId(),
+                    'unit_price' => $piece->getPrice(),
                     'quantity' => $quantity,
-                    'subtotal' => $subtotal,
                 ]);
+                $orderItem->setSubtotal($orderItem->calculateSubtotal());
+                $orderItem->save();
 
-                $total += $subtotal;
+                $total += $orderItem->getSubtotal();
             }
+
+            $order->setTotal($total);
+            $order->save();
+
+            $request->session()->forget('cart');
+
+            return redirect()->route('cart.index')->with('success', __('cart.order_created'));
+        } catch (QueryException $e) {
+            return redirect()->route('cart.index')->with('error', __('cart.order_failed'));
         }
-
-        $order->update(['total' => $total]);
-
-        $request->session()->forget('cart');
-
-        // Nombre de ruta, no url
-        return redirect('/orders')->with('success', 'Order created successfully');
     }
 }

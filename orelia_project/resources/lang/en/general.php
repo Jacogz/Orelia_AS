@@ -2,6 +2,8 @@
 
 return [
     // Navigation
+    'home' => 'Home',
+    'homepage' => 'Homepage',
     'pieces' => 'Pieces',
     'materials' => 'Materials',
     'collections' => 'Collections',

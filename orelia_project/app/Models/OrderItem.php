@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\Request;
 
 class OrderItem extends Model
 {
@@ -32,26 +31,7 @@ class OrderItem extends Model
         'piece_id',
     ];
 
-    public static function validate(Request $request): array
-    {
-        return $request->validate([
-            'unit_price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
-            'subtotal' => 'required|numeric|min:0',
-            'order_id' => 'required|integer|exists:orders,id',
-            'piece_id' => 'required|integer|exists:pieces,id',
-        ]);
-    }
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
-
-    public function piece(): BelongsTo
-    {
-        return $this->belongsTo(Piece::class, 'piece_id');
-    }
+    // Getters and setters
 
     public function getId(): int
     {
@@ -63,19 +43,14 @@ class OrderItem extends Model
         return $this->attributes['unit_price'];
     }
 
-    public function getQuantity(): int
-    {
-        return $this->attributes['quantity'];
-    }
-
-    public function getSubtotal(): int
-    {
-        return $this->attributes['subtotal'];
-    }
-
     public function setUnitPrice(int $unitPrice): void
     {
         $this->attributes['unit_price'] = $unitPrice;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->attributes['quantity'];
     }
 
     public function setQuantity(int $quantity): void
@@ -83,17 +58,36 @@ class OrderItem extends Model
         $this->attributes['quantity'] = $quantity;
     }
 
+    public function getSubtotal(): int
+    {
+        return $this->attributes['subtotal'];
+    }
+
     public function setSubtotal(int $subtotal): void
     {
         $this->attributes['subtotal'] = $subtotal;
     }
+
+    // Model methods
 
     public function calculateSubtotal(): int
     {
         return $this->getUnitPrice() * $this->getQuantity();
     }
 
-    // Getters for related models
+    // Relationships
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function piece(): BelongsTo
+    {
+        return $this->belongsTo(Piece::class, 'piece_id');
+    }
+
+    // Relationship getters
 
     public function getOrder(): Order
     {
