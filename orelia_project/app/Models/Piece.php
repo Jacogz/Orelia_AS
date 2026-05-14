@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Storage\ImageStorageInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -94,7 +95,22 @@ class Piece extends Model
 
     public function getImageUrl(): string
     {
-        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
+        $imageUrl = $this->attributes['image_url'];
+
+        if ($imageUrl === null) {
+            return self::DEFAULT_IMAGE;
+        }
+
+        if (str_starts_with($imageUrl, 'http')) {
+            return $imageUrl;
+        }
+
+        return app(ImageStorageInterface::class)->getUrl($imageUrl);
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->attributes['image_url'];
     }
 
     public function setImageUrl(?string $imageUrl): void

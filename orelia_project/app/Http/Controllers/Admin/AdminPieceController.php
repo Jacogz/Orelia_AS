@@ -7,13 +7,17 @@ use App\Http\Requests\Admin\Piece\StorePieceRequest;
 use App\Http\Requests\Admin\Piece\UpdatePieceRequest;
 use App\Models\Collection;
 use App\Models\Piece;
-use Illuminate\Database\QueryException;
+use App\Services\PieceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminPieceController extends Controller
 {
+    public function __construct(
+        private readonly PieceService $pieceService,
+    ) {}
+
     public function index(Request $request): View
     {
         $query = Piece::with('collection');
@@ -70,14 +74,7 @@ class AdminPieceController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $piece = new Piece;
-            $piece->fill($validationData);
-            $piece->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('pieces.error'));
-        }
+        $this->pieceService->createPiece($validationData, $request->file('image'));
 
         return redirect()->route('admin.pieces.index')
             ->with('success', __('pieces.created'));
@@ -92,6 +89,7 @@ class AdminPieceController extends Controller
         $viewData['title'] = __('pieces.edit_title');
         $viewData['piece'] = $piece;
         $viewData['collections'] = $collections;
+        $viewData['defaultImage'] = Piece::DEFAULT_IMAGE;
 
         return view('admin.pieces.edit')->with('viewData', $viewData);
     }
@@ -100,14 +98,8 @@ class AdminPieceController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $piece = Piece::findOrFail($id);
-            $piece->fill($validationData);
-            $piece->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('pieces.error'));
-        }
+        $piece = Piece::findOrFail($id);
+        $this->pieceService->updatePiece($piece, $validationData, $request->file('image'));
 
         return redirect()->route('admin.pieces.index')
             ->with('success', __('pieces.updated'));

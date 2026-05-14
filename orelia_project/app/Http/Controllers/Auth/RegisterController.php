@@ -26,7 +26,13 @@ class RegisterController extends Controller
     {
         $data = $request->validated();
 
-        event(new Registered($user = $this->create($data)));
+        $user = $this->create($data);
+
+        if (!$user) {
+            return redirect()->route('register')->with('error', __('auth.registration_failed'));
+        }
+
+        event(new Registered($user));
 
         $this->guard()->login($user);
 
@@ -39,7 +45,7 @@ class RegisterController extends Controller
             : redirect($this->redirectPath());
     }
 
-    protected function create(array $data): User
+    protected function create(array $data): ?User
     {
         try {
             return User::create([
@@ -50,7 +56,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
         } catch (QueryException $e) {
-            throw $e;
+            return null;
         }
     }
 }
