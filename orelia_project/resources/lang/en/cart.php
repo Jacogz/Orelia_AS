@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'title' => 'Cart - Orelia',
+    'subtitle' => 'Shopping Cart',
+    'items' => 'Items',
+    'product' => 'Product',
+    'currency' => '$',
+    'quantity' => 'Quantity',
+    'subtotal' => 'Subtotal',
+    'total' => 'Total',
+    'actions' => 'Actions',
+    'update' => 'Update',
+    'remove' => 'Remove',
+    'clear' => 'Clear Cart',
+    'checkout' => 'Checkout',
+    'back_to_pieces' => 'Back to Pieces',
+    'empty_message' => 'Your cart is empty.',
+    'piece_not_found' => 'Piece not found.',
+    'product_added' => 'Product added to cart.',
+    'updated' => 'Cart updated.',
+    'product_removed' => 'Product removed from cart.',
+    'cleared' => 'Cart cleared.',
+    'empty' => 'Cart is empty.',
+    'order_created' => 'Order created successfully.',
+    'order_failed' => 'There was an error creating the order. Please try again.',
+    'invalid_quantity' => 'The quantity must be at least 1.',
+];

@@ -60,7 +60,20 @@ return [
             'report' => false,
         ],
 
+        'gcs' => [
+            'driver' => 'gcs',
+            'key_file_path' => env('GOOGLE_APPLICATION_CREDENTIALS'),
+            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
+            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET'),
+            'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', ''),
+            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
+
+    'image_storage_driver' => env('IMAGE_STORAGE_DRIVER', 'local'),
 
     /*
     |--------------------------------------------------------------------------

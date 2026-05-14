@@ -1,1 +1,0 @@
-Piece creation form.

@@ -2,37 +2,62 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use illuminate\Http\Request;
-
-use App\Models\Piece;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Collection as EloquentCollection;
 
 class Collection extends Model
 {
     use HasFactory;
+
     /**
      * COLLECTION ATTRIBUTES
      * $this->attributes['id'] - int - contains the collection primary key
      * $this->attributes['name'] - string - contains the collection name
-     * $this->pieces - Piece[] - contains the collection pieces list
+     * $this->attributes['description'] - string - contains the collection description
      * $this->attributes['created_at'] - timestamp - contains the collection creation timestamp
      * $this->attributes['updated_at'] - timestamp - contains the collection update timestamp
+     * $this->pieces - Piece[] - contains the collection pieces list
      */
-
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
-    public static function validate(Request $request): array
+    public function getId(): int
     {
-        return $request->validate([
-            'name' => 'required|string|max:30',
-            'description' => 'nullable|string|max:255',
-        ]);
+        return $this->attributes['id'];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
     }
 
     public function pieces(): HasMany
@@ -40,11 +65,8 @@ class Collection extends Model
         return $this->hasMany(Piece::class);
     }
 
-    // Getters for related models
     public function getPieces(): EloquentCollection
     {
         return $this->pieces;
     }
-
-
 }

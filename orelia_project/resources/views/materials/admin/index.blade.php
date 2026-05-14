@@ -1,1 +1,0 @@
-Admin materials management view.
