@@ -24,6 +24,7 @@ class CheckoutRequest extends FormRequest
 
             if (empty($cartData)) {
                 $validator->errors()->add('cart', __('cart.empty'));
+
                 return;
             }
 
@@ -55,6 +56,7 @@ class CheckoutRequest extends FormRequest
         foreach ($cartData as $pieceId => $quantity) {
             $validated[$pieceId] = $quantity;
         }
+
         return $validated;
     }
 }

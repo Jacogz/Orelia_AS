@@ -15,6 +15,7 @@ return [
     'manage_pieces' => 'Administrar piezas',
     'manage_materials' => 'Administrar materiales',
     'manage_collections' => 'Administrar colecciones',
+    'confirm_delete_title' => 'Confirmar eliminación',
 
     // Actions
     'save' => 'Guardar',
@@ -30,4 +31,14 @@ return [
     'error' => 'Error',
     'unauthorized' => 'Acceso no autorizado.',
     'validation_errors' => 'Errores de validación',
+
+    'toggle_navigation' => 'Alternar navegación',
+    'close' => 'Cerrar',
+    'footer_tagline' => 'Joyería artesanal hecha con intención.',
+    'footer_contact_info' => 'contacto@orelia.com · +57 300 000 0000',
+    'footer_rights' => 'Todos los derechos reservados.',
+    'footer_shop' => 'Tienda',
+    'footer_account' => 'Mi cuenta',
+    'footer_contact' => 'Contacto',
+    'admin' => 'Admin',
 ];

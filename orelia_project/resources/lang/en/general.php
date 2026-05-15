@@ -31,9 +31,20 @@ return [
     'error' => 'Error',
     'unauthorized' => 'Unauthorized access.',
     'validation_errors' => 'Validation Errors',
+    'confirm_delete_title' => 'Confirm deletion',
 
     // Filters
     'filter' => 'Filter',
     'clear' => 'Clear',
     'back' => 'Back',
+
+    'toggle_navigation' => 'Toggle navigation',
+    'close' => 'Close',
+    'footer_tagline' => 'Artisan jewelry crafted with intention.',
+    'footer_contact_info' => 'contact@orelia.com · +57 300 000 0000',
+    'footer_rights' => 'All rights reserved.',
+    'footer_shop' => 'Shop',
+    'footer_account' => 'Account',
+    'footer_contact' => 'Contact',
+    'admin' => 'Admin',
 ];

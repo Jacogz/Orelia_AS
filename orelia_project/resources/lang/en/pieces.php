@@ -49,4 +49,13 @@ return [
 
     // Subtitle
     'subtitle' => 'Discover our exclusive luxury jewelry pieces',
+
+    // Types
+    'select_type' => 'Select type',
+    'type_ring' => 'Ring',
+    'type_necklace' => 'Necklace',
+    'type_bracelet' => 'Bracelet',
+    'type_earring' => 'Earring',
+    'type_brooch' => 'Brooch',
+    'type_other' => 'Other',
 ];

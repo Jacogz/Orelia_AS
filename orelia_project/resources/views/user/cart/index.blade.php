@@ -7,20 +7,6 @@
         <h2>{{ $viewData['subtitle'] }}</h2>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     @if(empty($viewData['cartItems']))
         <div class="alert alert-info">Your cart is empty.</div>
         <a href="{{ route('pieces.index') }}" class="btn btn-outline-secondary">Browse pieces</a>
@@ -53,7 +39,7 @@
                                 <form action="{{ route('cart.update', $item['piece']->getId()) }}" method="POST" class="d-flex gap-2">
                                     @csrf
                                     @method('PUT')
-                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control form-control-sm" style="width: 70px;">
+                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['piece']->getStock() }}" class="form-control form-control-sm" style="width: 70px;">
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
                                 </form>
                             </td>

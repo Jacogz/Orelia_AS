@@ -41,4 +41,13 @@ return [
 
     // Subtitle
     'subtitle' => 'Descubre nuestras exclusivas piezas de joyería de lujo',
+
+    // Types
+    'select_type' => 'Seleccionar tipo',
+    'type_ring' => 'Anillo',
+    'type_necklace' => 'Collar',
+    'type_bracelet' => 'Pulsera',
+    'type_earring' => 'Arete',
+    'type_brooch' => 'Broche',
+    'type_other' => 'Otro',
 ];

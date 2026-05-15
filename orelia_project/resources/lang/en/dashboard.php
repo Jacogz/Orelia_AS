@@ -24,6 +24,27 @@ return [
     'date' => 'Date',
     'empty' => 'No orders found.',
 
+    // Order status
+    'status_pending' => 'Pending',
+    'status_processing' => 'Processing',
+    'status_shipped' => 'Shipped',
+    'status_completed' => 'Completed',
+    'status_cancelled' => 'Cancelled',
+
+    // Payment status
+    'payment_status_pending' => 'Pending',
+    'payment_status_paid' => 'Paid',
+    'payment_status_failed' => 'Failed',
+    'payment_status_refunded' => 'Refunded',
+
+    // Payment method
+    'payment_method_pending' => 'Pending',
+    'payment_method_card' => 'Card',
+    'payment_method_cash' => 'Cash',
+    'payment_method_credit_card' => 'Credit Card',
+    'payment_method_debit_card' => 'Debit Card',
+    'payment_method_paypal' => 'PayPal',
+
     // Top pieces
     'top_pieces' => 'Top 3 Best Selling Pieces',
     'piece_name' => 'Piece',

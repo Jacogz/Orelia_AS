@@ -13,7 +13,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.orders') }}</p>
-                <h3 class="fw-bold mb-0">{{ $viewData['totalOrders'] }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif;">{{ $viewData['totalOrders'] }}</h3>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.revenue') }}</p>
-                <h3 class="fw-bold mb-0">${{ number_format($viewData['totalRevenue'], 0) }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif; white-space: nowrap;">${{ number_format($viewData['totalRevenue'], 0) }}</h3>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.pieces') }}</p>
-                <h3 class="fw-bold mb-0">{{ $viewData['totalPieces'] }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif;">{{ $viewData['totalPieces'] }}</h3>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.clients') }}</p>
-                <h3 class="fw-bold mb-0">{{ $viewData['totalUsers'] }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif;">{{ $viewData['totalUsers'] }}</h3>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.collections') }}</p>
-                <h3 class="fw-bold mb-0">{{ $viewData['totalCollections'] }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif;">{{ $viewData['totalCollections'] }}</h3>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
         <div class="card h-100 border-0 shadow-sm text-center py-3">
             <div class="card-body">
                 <p class="text-muted small mb-1">{{ __('dashboard.materials') }}</p>
-                <h3 class="fw-bold mb-0">{{ $viewData['totalMaterials'] }}</h3>
+                <h3 class="fw-bold mb-0" style="font-family: 'Lato', sans-serif;">{{ $viewData['totalMaterials'] }}</h3>
             </div>
         </div>
     </div>
@@ -80,29 +80,29 @@
                 <tbody>
                     @forelse ($viewData['recentOrders'] as $order)
                     <tr>
-                        <td>{{ $order->id }}</td>
+                        <td>{{ $order->getId() }}</td>
                         <td>{{ $order->getUser()?->getFullName() ?? 'N/A' }}</td>
-                        <td>${{ number_format($order->total, 0) }}</td>
+                        <td>${{ number_format($order->getTotal(), 0) }}</td>
                         <td>
                             <span class="badge
-                                @if($order->status === 'completed') bg-success
-                                @elseif($order->status === 'pending') bg-warning text-dark
-                                @elseif($order->status === 'cancelled') bg-danger
+                                @if($order->getStatus() === 'completed') bg-success
+                                @elseif($order->getStatus() === 'pending') bg-warning text-dark
+                                @elseif($order->getStatus() === 'cancelled') bg-danger
                                 @else bg-secondary
                                 @endif">
-                                {{ $order->status }}
+                                {{ __('dashboard.status_' . $order->getStatus()) }}
                             </span>
                         </td>
                         <td>
                             <span class="badge
-                                @if($order->payment_status === 'paid') bg-success
-                                @elseif($order->payment_status === 'pending') bg-warning text-dark
+                                @if($order->getPaymentStatus() === 'paid') bg-success
+                                @elseif($order->getPaymentStatus() === 'pending') bg-warning text-dark
                                 @else bg-secondary
                                 @endif">
-                                {{ $order->payment_status }}
+                                {{ __('dashboard.payment_status_' . $order->getPaymentStatus()) }}
                             </span>
                         </td>
-                        <td>{{ $order->payment_method }}</td>
+                        <td>{{ __('dashboard.payment_method_' . $order->getPaymentMethod()) }}</td>
                         <td>{{ $order->created_at->format('d/m/Y') }}</td>
                     </tr>
                     @empty
@@ -136,7 +136,7 @@
                     @forelse ($viewData['topPieces'] as $index => $item)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->getPiece()->name }}</td>
+                        <td>{{ $item->getPiece()->getName() }}</td>
                         <td>{{ $item->total_sold }}</td>
                     </tr>
                     @empty
