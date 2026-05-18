@@ -46,14 +46,9 @@ class AdminCollectionController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $collection = new Collection;
-            $collection->fill($validationData);
-            $collection->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('collections.error'));
-        }
+        $collection = new Collection;
+        $collection->fill($validationData);
+        $collection->save();
 
         return redirect()->route('admin.collections.index')
             ->with('success', __('collections.created'));
@@ -74,14 +69,9 @@ class AdminCollectionController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $collection = Collection::findOrFail($id);
-            $collection->fill($validationData);
-            $collection->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('collections.error'));
-        }
+        $collection = Collection::findOrFail($id);
+        $collection->fill($validationData);
+        $collection->save();
 
         return redirect()->route('admin.collections.index')
             ->with('success', __('collections.updated'));

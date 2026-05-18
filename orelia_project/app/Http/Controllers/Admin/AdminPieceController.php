@@ -70,14 +70,9 @@ class AdminPieceController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $piece = new Piece;
-            $piece->fill($validationData);
-            $piece->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('pieces.error'));
-        }
+        $piece = new Piece;
+        $piece->fill($validationData);
+        $piece->save();
 
         return redirect()->route('admin.pieces.index')
             ->with('success', __('pieces.created'));
@@ -100,14 +95,9 @@ class AdminPieceController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $piece = Piece::findOrFail($id);
-            $piece->fill($validationData);
-            $piece->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('pieces.error'));
-        }
+        $piece = Piece::findOrFail($id);
+        $piece->fill($validationData);
+        $piece->save();
 
         return redirect()->route('admin.pieces.index')
             ->with('success', __('pieces.updated'));
