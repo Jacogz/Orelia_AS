@@ -52,14 +52,9 @@ class AdminMaterialController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $material = new Material;
-            $material->fill($validationData);
-            $material->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('materials.error'));
-        }
+        $material = new Material;
+        $material->fill($validationData);
+        $material->save();
 
         return redirect()->route('admin.materials.index')
             ->with('success', __('materials.created'));
@@ -80,14 +75,9 @@ class AdminMaterialController extends Controller
     {
         $validationData = $request->validated();
 
-        try {
-            $material = Material::findOrFail($id);
-            $material->fill($validationData);
-            $material->save();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', __('materials.error'));
-        }
+        $material = Material::findOrFail($id);
+        $material->fill($validationData);
+        $material->save();
 
         return redirect()->route('admin.materials.index')
             ->with('success', __('materials.updated'));

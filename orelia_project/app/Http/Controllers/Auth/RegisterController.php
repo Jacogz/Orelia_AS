@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -41,16 +40,12 @@ class RegisterController extends Controller
 
     protected function create(array $data): User
     {
-        try {
-            return User::create([
-                'name' => $data['name'],
-                'last_name' => $data['last_name'],
-                'address' => $data['address'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-            ]);
-        } catch (QueryException $e) {
-            throw $e;
-        }
+        return User::create([
+            'name' => $data['name'],
+            'last_name' => $data['last_name'],
+            'address' => $data['address'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
     }
 }
