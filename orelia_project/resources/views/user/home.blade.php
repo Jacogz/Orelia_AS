@@ -34,7 +34,7 @@
 {{-- Featured Pieces --}}
 @if(!empty($viewData['featuredPieces']) && $viewData['featuredPieces']->count())
 <section class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--orelia-dark);">
             {{ __('home.featured_pieces') }}
         </h2>
@@ -44,6 +44,18 @@
             {{ __('home.see_all') }} <i class="bi bi-arrow-right"></i>
         </a>
     </div>
+
+    {{-- Currency selector --}}
+    @if(isset($viewData['rates']) && $viewData['rates']['available'])
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <span style="font-family: 'Lato', sans-serif; font-size: 0.75rem; letter-spacing: 0.1em; color: #6c757d; text-transform: uppercase;">
+            {{ __('pieces.view_prices_in') }}:
+        </span>
+        <button class="currency-btn active" onclick="setCurrency('COP', this)">COP</button>
+        <button class="currency-btn" onclick="setCurrency('USD', this)">USD</button>
+        <button class="currency-btn" onclick="setCurrency('EUR', this)">EUR</button>
+    </div>
+    @endif
 
     <div class="row g-4">
         @foreach($viewData['featuredPieces'] as $piece)
@@ -67,8 +79,14 @@
                     <h3 class="card-title mb-1" style="font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 500; color: var(--orelia-dark);">
                         {{ $piece->getName() }}
                     </h3>
-                    <p class="mb-3" style="font-family: 'Lato', sans-serif; font-size: 0.875rem; color: #6c757d;">
-                        ${{ number_format($piece->getPrice(), 2) }}
+                    <p class="mb-3 piece-price"
+                       style="font-family: 'Lato', sans-serif; font-size: 0.875rem; color: #6c757d;"
+                       data-cop="{{ $piece->getPrice() }}"
+                       @if(isset($viewData['rates']) && $viewData['rates']['available'])
+                       data-usd="{{ $viewData['rates']['USD'] }}"
+                       data-eur="{{ $viewData['rates']['EUR'] }}"
+                       @endif>
+                        ${{ number_format($piece->getPrice(), 2) }} COP
                     </p>
                     <a href="{{ route('pieces.show', $piece->getId()) }}"
                         class="btn btn-sm mt-auto w-100"

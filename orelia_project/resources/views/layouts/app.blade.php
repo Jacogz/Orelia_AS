@@ -190,11 +190,6 @@
             transition: opacity 0.3s ease;
         }
 
-        .orelia-overlay {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
         .orelia-card:hover .orelia-overlay {
             opacity: 1;
         }
@@ -404,6 +399,28 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        function setCurrency(currency, btn) {
+            document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.piece-price').forEach(el => {
+                const cop = parseFloat(el.dataset.cop);
+                const usd = parseFloat(el.dataset.usd);
+                const eur = parseFloat(el.dataset.eur);
+
+                if (currency === 'COP') {
+                    el.textContent = '$' + cop.toLocaleString('es-CO', {minimumFractionDigits: 2}) + ' COP';
+                } else if (currency === 'USD') {
+                    el.textContent = '$' + (cop * usd).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' USD';
+                } else if (currency === 'EUR') {
+                    el.textContent = '€' + (cop * eur).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' EUR';
+                }
+            });
+        }
+    </script>
+
     @yield('scripts')
 
 </body>
