@@ -4,11 +4,19 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
+use App\Services\ExchangeRateService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CollectionController extends Controller
 {
+    private ExchangeRateService $exchangeRateService;
+
+    public function __construct(ExchangeRateService $exchangeRateService)
+    {
+        $this->exchangeRateService = $exchangeRateService;
+    }
+
     public function index(Request $request): View
     {
         $query = Collection::query();
@@ -17,12 +25,10 @@ class CollectionController extends Controller
             $query->where('name', 'like', '%'.$request->name.'%');
         }
 
-        $collections = $query->get();
-
         $viewData = [];
         $viewData['title'] = __('collections.title');
         $viewData['subtitle'] = __('collections.subtitle');
-        $viewData['collections'] = $collections;
+        $viewData['collections'] = $query->get();
 
         return view('user.collections.index')->with('viewData', $viewData);
     }
@@ -35,6 +41,7 @@ class CollectionController extends Controller
         $viewData['title'] = $collection->getName();
         $viewData['collection'] = $collection;
         $viewData['pieces'] = $collection->getPieces();
+        $viewData['rates'] = $this->exchangeRateService->getRates();
 
         return view('user.collections.show')->with('viewData', $viewData);
     }

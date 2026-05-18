@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('title', $viewData['title'])
-
 @section('content')
 <div class="mb-4 text-center">
     <h2 class="text-uppercase">{{ $viewData['collection']->getName() }}</h2>
@@ -11,6 +10,19 @@
 @if($viewData['pieces']->isEmpty())
     <div class="text-center text-muted py-5 text-uppercase small">{{ __('collections.no_pieces') }}</div>
 @else
+
+    {{-- Currency selector --}}
+    @if(isset($viewData['rates']) && $viewData['rates']['available'])
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <span style="font-family: 'Lato', sans-serif; font-size: 0.75rem; letter-spacing: 0.1em; color: #6c757d; text-transform: uppercase;">
+            {{ __('pieces.view_prices_in') }}:
+        </span>
+        <button class="currency-btn active" onclick="setCurrency('COP', this)">COP</button>
+        <button class="currency-btn" onclick="setCurrency('USD', this)">USD</button>
+        <button class="currency-btn" onclick="setCurrency('EUR', this)">EUR</button>
+    </div>
+    @endif
+
     <div class="row row-cols-2 row-cols-md-4 g-4">
         @foreach($viewData['pieces'] as $piece)
             <div class="col orelia-card">
@@ -37,7 +49,14 @@
                         class="d-block text-uppercase small fw-semibold text-dark text-decoration-none">
                         {{ $piece->getName() }}
                     </a>
-                    <span class="d-block small">${{ number_format($piece->getPrice(), 2) }}</span>
+                    <span class="d-block small piece-price"
+                          data-cop="{{ $piece->getPrice() }}"
+                          @if(isset($viewData['rates']) && $viewData['rates']['available'])
+                          data-usd="{{ $viewData['rates']['USD'] }}"
+                          data-eur="{{ $viewData['rates']['EUR'] }}"
+                          @endif>
+                        ${{ number_format($piece->getPrice(), 2) }} COP
+                    </span>
                 </div>
             </div>
         @endforeach
@@ -49,4 +68,27 @@
         {{ __('general.back') }}
     </a>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function setCurrency(currency, btn) {
+        document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.piece-price').forEach(el => {
+            const cop = parseFloat(el.dataset.cop);
+            const usd = parseFloat(el.dataset.usd);
+            const eur = parseFloat(el.dataset.eur);
+
+            if (currency === 'COP') {
+                el.textContent = '$' + cop.toLocaleString('es-CO', {minimumFractionDigits: 2}) + ' COP';
+            } else if (currency === 'USD') {
+                el.textContent = '$' + (cop * usd).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' USD';
+            } else if (currency === 'EUR') {
+                el.textContent = '€' + (cop * eur).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' EUR';
+            }
+        });
+    }
+</script>
 @endsection

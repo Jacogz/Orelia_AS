@@ -28,6 +28,14 @@ return [
     'create' => 'Crear pieza',
     'view_detail' => 'Ver detalle',
 
+    'all_types' => 'Todos los tipos',
+    'all_collections' => 'Todas las colecciones',
+    'all_stock' => 'Todo',
+    'min_price' => 'Precio mínimo',
+    'max_price' => 'Precio máximo',
+    'view' => 'Ver detalle',
+    'add_to_cart' => 'Agregar al carrito',
+
     // Messages
     'created' => 'La pieza se creó correctamente.',
     'updated' => 'La pieza se actualizó correctamente.',
@@ -50,4 +58,6 @@ return [
     'type_earring' => 'Arete',
     'type_brooch' => 'Broche',
     'type_other' => 'Otro',
+
+    'view_prices_in' => 'Ver precios en',
 ];

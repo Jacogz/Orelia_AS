@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,14 +10,14 @@
     <title>@yield('title', 'Orelia')</title>
     <style>
         :root {
-            --orelia-gold:       #B8962E;
+            --orelia-gold: #B8962E;
             --orelia-gold-light: #C9A94E;
             --orelia-gold-muted: rgba(184, 150, 46, 0.25);
-            --orelia-dark:       #1A1A1A;
-            --orelia-dark-soft:  #2C2C2C;
-            --orelia-cream:      #F9F6F0;
-            --orelia-text:       #2E2E2E;
-            --orelia-border:     rgba(0, 0, 0, 0.08);
+            --orelia-dark: #1A1A1A;
+            --orelia-dark-soft: #2C2C2C;
+            --orelia-cream: #F9F6F0;
+            --orelia-text: #2E2E2E;
+            --orelia-border: rgba(0, 0, 0, 0.08);
         }
 
         body {
@@ -28,9 +29,13 @@
             flex-direction: column;
         }
 
-        main { flex: 1; }
+        main {
+            flex: 1;
+        }
 
-        h1, h2, .navbar-brand {
+        h1,
+        h2,
+        .navbar-brand {
             font-family: 'Cormorant Garamond', serif;
         }
 
@@ -124,7 +129,8 @@
             background-color: rgba(184, 150, 46, 0.05);
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--orelia-gold);
             box-shadow: 0 0 0 0.2rem rgba(184, 150, 46, 0.2);
         }
@@ -165,7 +171,9 @@
             transition: color 0.2s ease;
         }
 
-        .orelia-footer a:hover { color: var(--orelia-gold); }
+        .orelia-footer a:hover {
+            color: var(--orelia-gold);
+        }
 
         .orelia-footer .footer-divider {
             border-color: var(--orelia-gold-muted);
@@ -182,82 +190,136 @@
             transition: opacity 0.3s ease;
         }
 
+        .orelia-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
         .orelia-card:hover .orelia-overlay {
             opacity: 1;
         }
+
+        .currency-btn {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--orelia-gold);
+            color: var(--orelia-gold);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .currency-btn.active {
+            background: var(--orelia-gold);
+            color: #fff;
+        }
+
+        .currency-btn:hover {
+            background: var(--orelia-gold);
+            color: #fff;
+        }
     </style>
-    @stack('styles')
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg orelia-navbar py-3">
-    <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}">ORELIA</a>
+    <nav class="navbar navbar-expand-lg orelia-navbar py-3">
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('home') }}">ORELIA</a>
 
-        <button class="navbar-toggler" type="button"
+            <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar"
                 aria-expanded="false"
                 aria-label="{{ __('general.toggle_navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('pieces.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
-                       href="{{ route('pieces.index') }}">{{ __('general.pieces') }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('materials.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
-                       href="{{ route('materials.index') }}">{{ __('general.materials') }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('collections.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
-                       href="{{ route('collections.index') }}">{{ __('general.collections') }}</a>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('pieces.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
+                            href="{{ route('pieces.index') }}">{{ __('general.pieces') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('materials.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
+                            href="{{ route('materials.index') }}">{{ __('general.materials') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('collections.*') && !request()->routeIs('admin.*') ? 'active' : '' }}"
+                            href="{{ route('collections.index') }}">{{ __('general.collections') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('exchangerate.*') ? 'active' : '' }}"
+                            href="{{ route('exchangerate.index') }}">{{ __('general.converter') }}</a>
+                    </li>
+                </ul>
 
-            <ul class="navbar-nav align-items-lg-center gap-lg-1">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('cart.*') ? 'active' : '' }}"
-                       href="{{ route('cart.index') }}">
-                        <i class="bi bi-bag me-1"></i>{{ __('general.cart') }}
+                <li class="nav-item d-flex align-items-center gap-1 me-2">
+                    <a href="{{ route('lang.switch', 'en') }}"
+                       class="nav-link py-0 px-1"
+                       style="{{ app()->getLocale() === 'en' ? 'color: var(--orelia-gold) !important;' : '' }}">
+                       EN
+                    </a>
+                    <span style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">|</span>
+                    <a href="{{ route('lang.switch', 'es') }}"
+                       class="nav-link py-0 px-1"
+                       style="{{ app()->getLocale() === 'es' ? 'color: var(--orelia-gold) !important;' : '' }}">
+                       ES
                     </a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('cart.*') ? 'active' : '' }}"
+                            href="{{ route('cart.index') }}">
+                            <span class="position-relative">
+                                <i class="bi bi-bag me-1"></i>{{ __('general.cart') }}
+                                @php $cartCount = count(session('cart', [])); @endphp
+                                @if($cartCount > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                                    style="background: var(--orelia-gold); font-size: 0.6rem; padding: 0.25em 0.45em;">
+                                    {{ $cartCount }}
+                                </span>
+                                @endif
+                            </span>
+                        </a>
+                    </li>
 
-                @auth
+                    @auth
                     @if(Auth::user()->isAdmin())
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.*') ? 'active' : '' }}"
-                               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-shield-check me-1"></i>{{ __('general.admin') }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                        <i class="bi bi-grid me-2"></i>{{ __('general.admin_dashboard') }}
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('admin.pieces.index') }}">
-                                        <i class="bi bi-gem me-2"></i>{{ __('general.manage_pieces') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('admin.materials.index') }}">
-                                        <i class="bi bi-layers me-2"></i>{{ __('general.manage_materials') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('admin.collections.index') }}">
-                                        <i class="bi bi-collection me-2"></i>{{ __('general.manage_collections') }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.*') ? 'active' : '' }}"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-shield-check me-1"></i>{{ __('general.admin') }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                    <i class="bi bi-grid me-2"></i>{{ __('general.admin_dashboard') }}
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.pieces.index') }}">
+                                    <i class="bi bi-gem me-2"></i>{{ __('general.manage_pieces') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.materials.index') }}">
+                                    <i class="bi bi-layers me-2"></i>{{ __('general.manage_materials') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.collections.index') }}">
+                                    <i class="bi bi-collection me-2"></i>{{ __('general.manage_collections') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     @endif
 
                     <li class="nav-item">
@@ -268,81 +330,82 @@
                             </button>
                         </form>
                     </li>
-                @else
+                    @else
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}"
-                           href="{{ route('login') }}">{{ __('general.login') }}</a>
+                            href="{{ route('login') }}">{{ __('general.login') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('register') ? 'active' : '' }}"
-                           href="{{ route('register') }}">{{ __('general.register') }}</a>
+                            href="{{ route('register') }}">{{ __('general.register') }}</a>
                     </li>
-                @endauth
-            </ul>
+                    @endauth
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<main class="container my-4">
-    @if($message = Session::get('success'))
+    <main class="container my-4">
+        @if($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
             <strong>{{ __('general.success') }}:</strong> {{ $message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('general.close') }}"></button>
         </div>
-    @endif
+        @endif
 
-    @if($message = Session::get('error'))
+        @if($message = Session::get('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <strong>{{ __('general.error') }}:</strong> {{ $message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('general.close') }}"></button>
         </div>
-    @endif
+        @endif
 
-    @yield('content')
-</main>
+        @yield('content')
+    </main>
 
-<footer class="orelia-footer py-5 mt-auto">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-12 col-lg-4">
-                <div class="footer-brand mb-2">ORELIA</div>
-                <p class="small mb-0">{{ __('general.footer_tagline') }}</p>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <h6 class="footer-heading">{{ __('general.footer_shop') }}</h6>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><a href="{{ route('pieces.index') }}">{{ __('general.pieces') }}</a></li>
-                    <li class="mb-2"><a href="{{ route('collections.index') }}">{{ __('general.collections') }}</a></li>
-                    <li class="mb-2"><a href="{{ route('materials.index') }}">{{ __('general.materials') }}</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <h6 class="footer-heading">{{ __('general.footer_account') }}</h6>
-                <ul class="list-unstyled mb-0">
-                    @auth
+    <footer class="orelia-footer py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-lg-4">
+                    <div class="footer-brand mb-2">ORELIA</div>
+                    <p class="small mb-0">{{ __('general.footer_tagline') }}</p>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <h6 class="footer-heading">{{ __('general.footer_shop') }}</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><a href="{{ route('pieces.index') }}">{{ __('general.pieces') }}</a></li>
+                        <li class="mb-2"><a href="{{ route('collections.index') }}">{{ __('general.collections') }}</a></li>
+                        <li class="mb-2"><a href="{{ route('materials.index') }}">{{ __('general.materials') }}</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <h6 class="footer-heading">{{ __('general.footer_account') }}</h6>
+                    <ul class="list-unstyled mb-0">
+                        @auth
                         <li class="mb-2"><a href="{{ route('cart.index') }}">{{ __('general.cart') }}</a></li>
-                    @else
+                        @else
                         <li class="mb-2"><a href="{{ route('login') }}">{{ __('general.login') }}</a></li>
                         <li class="mb-2"><a href="{{ route('register') }}">{{ __('general.register') }}</a></li>
-                    @endauth
-                </ul>
+                        @endauth
+                    </ul>
+                </div>
+                <div class="col-12 col-md-4 col-lg-4">
+                    <h6 class="footer-heading">{{ __('general.footer_contact') }}</h6>
+                    <p class="small mb-0">{{ __('general.footer_contact_info') }}</p>
+                </div>
             </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                <h6 class="footer-heading">{{ __('general.footer_contact') }}</h6>
-                <p class="small mb-0">{{ __('general.footer_contact_info') }}</p>
-            </div>
+
+            <hr class="footer-divider">
+
+            <p class="footer-copy mb-0">&copy; {{ date('Y') }} Orelia. {{ __('general.footer_rights') }}</p>
         </div>
+    </footer>
 
-        <hr class="footer-divider">
-
-        <p class="footer-copy mb-0">&copy; {{ date('Y') }} Orelia. {{ __('general.footer_rights') }}</p>
-    </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-@yield('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    @yield('scripts')
 
 </body>
+
 </html>

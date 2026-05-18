@@ -47,4 +47,5 @@ return [
     'footer_account' => 'Account',
     'footer_contact' => 'Contact',
     'admin' => 'Admin',
+    'converter' => 'Converter',
 ];

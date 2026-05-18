@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'exchangerate' => [
+        'key' => env('EXCHANGERATE_API_KEY'),
+        'base_currency' => env('EXCHANGERATE_BASE_CURRENCY', 'COP'),
+    ],
+
 ];

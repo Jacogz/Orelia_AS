@@ -58,4 +58,7 @@ return [
     'type_earring' => 'Earring',
     'type_brooch' => 'Brooch',
     'type_other' => 'Other',
+
+    'view_prices_in' => 'View prices in',
+
 ];

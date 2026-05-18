@@ -20,6 +20,17 @@ return [
     'delete' => 'Eliminar',
     'create' => 'Crear material',
 
+    'all_types' => 'Todos los tipos',
+    'view' => 'Ver detalle',
+
+    // Types
+    'select_type' => 'Seleccionar tipo',
+    'type_metal' => 'Metal',
+    'type_gemstone' => 'Piedra preciosa',
+    'type_leather' => 'Cuero',
+    'type_textile' => 'Textil',
+    'type_other' => 'Otro',
+
     // Messages
     'created' => 'El material se creó correctamente.',
     'updated' => 'El material se actualizó correctamente.',

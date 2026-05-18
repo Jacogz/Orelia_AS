@@ -5,11 +5,19 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\Piece;
+use App\Services\ExchangeRateService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PieceController extends Controller
 {
+    private ExchangeRateService $exchangeRateService;
+
+    public function __construct(ExchangeRateService $exchangeRateService)
+    {
+        $this->exchangeRateService = $exchangeRateService;
+    }
+
     public function index(Request $request): View
     {
         $query = Piece::with('collection');
@@ -38,16 +46,13 @@ class PieceController extends Controller
             $query->where('stock', '>', 0);
         }
 
-        $pieces = $query->get();
-        $collections = Collection::all();
-        $types = Piece::select('type')->distinct()->pluck('type');
-
         $viewData = [];
         $viewData['title'] = __('pieces.title');
         $viewData['subtitle'] = __('pieces.subtitle');
-        $viewData['pieces'] = $pieces;
-        $viewData['collections'] = $collections;
-        $viewData['types'] = $types;
+        $viewData['pieces'] = $query->get();
+        $viewData['collections'] = Collection::all();
+        $viewData['types'] = Piece::select('type')->distinct()->pluck('type');
+        $viewData['rates'] = $this->exchangeRateService->getRates();
 
         return view('user.pieces.index')->with('viewData', $viewData);
     }

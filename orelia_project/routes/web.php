@@ -4,14 +4,18 @@ use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMaterialController;
 use App\Http\Controllers\Admin\AdminPieceController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CollectionController;
+use App\Http\Controllers\User\ExchangeRateController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\MaterialController;
 use App\Http\Controllers\User\PieceController;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+
+Route::get('/lang/{locale}', [LanguageController::class, 'switch'])->name('lang.switch');
 
 // Home Route
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,6 +28,7 @@ Route::get('/materials/{id}', [MaterialController::class, 'show'])->name('materi
 Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
 Route::get('/collections/{id}', [CollectionController::class, 'show'])->name('collections.show');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/conversiones', [ExchangeRateController::class, 'index'])->name('exchangerate.index');
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])
