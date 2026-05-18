@@ -20,14 +20,14 @@ class HomeController extends Controller
     public function index(): View
     {
         $viewData = [];
-        $viewData['title']          = __('general.home');
+        $viewData['title'] = __('general.home');
         $viewData['featuredPieces'] = Piece::with('collection')
             ->where('stock', '>', 0)
             ->latest()
             ->take(8)
             ->get();
-        $viewData['collections']    = Collection::all();
-        $viewData['rates']          = $this->exchangeRateService->getRates();
+        $viewData['collections'] = Collection::all();
+        $viewData['rates'] = $this->exchangeRateService->getRates();
 
         return view('user.home')->with('viewData', $viewData);
     }
