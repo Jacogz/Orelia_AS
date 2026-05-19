@@ -36,12 +36,16 @@ return [
     ],
 
     'exchangerate' => [
-        'key' => env('EXCHANGERATE_API_KEY'),
-        'base_currency' => env('EXCHANGERATE_BASE_CURRENCY', 'COP'),
+        'key' => env('EXCHANGE_RATE_API_KEY'),
+        'base_currency' => env('EXCHANGE_RATE_BASE_CURRENCY', 'COP'),
     ],
 
     'image_storage' => [
         'driver' => env('IMAGE_STORAGE_DRIVER', 'local'),
+    ],
+
+    'guest_products' => [
+        'base_url' => env('GUEST_PRODUCTS_API_URL', 'http://tiendaelitesport.duckdns.org'),
     ],
 
 ];

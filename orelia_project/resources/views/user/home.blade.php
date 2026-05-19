@@ -128,6 +128,57 @@
 </section>
 @endif
 
+{{-- Guest Products (partner store) --}}
+@if(isset($viewData['guestProducts']))
+<section style="background: var(--orelia-cream);" class="py-5 mb-5">
+    <div class="container">
+        <h2 class="text-center mb-2" style="font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--orelia-dark);">
+            {{ __('home.guest_products_title') }}
+        </h2>
+        <p class="text-center text-muted mb-4" style="font-family: 'Lato', sans-serif; font-size: 0.875rem;">
+            {{ __('home.guest_products_subtitle') }}
+        </p>
+
+        @if($viewData['guestProducts']['available'] && !empty($viewData['guestProducts']['products']))
+        <div class="row g-4">
+            @foreach($viewData['guestProducts']['products'] as $product)
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 2px;">
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="height: 220px; background: #fff;">
+                        <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--orelia-gold-light);"></i>
+                    </div>
+                    <div class="card-body d-flex flex-column p-3">
+                        <h3 class="card-title mb-1" style="font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 500; color: var(--orelia-dark);">
+                            {{ $product['name'] }}
+                        </h3>
+                        <p class="mb-1" style="font-family: 'Lato', sans-serif; font-size: 0.875rem; color: #6c757d;">
+                            ${{ number_format($product['price'], 2) }} COP
+                        </p>
+                        <p class="mb-3" style="font-size: 0.7rem; letter-spacing: 0.1em; color: var(--orelia-gold); text-transform: uppercase; font-family: 'Lato', sans-serif;">
+                            {{ __('home.guest_stock', ['count' => $product['stock']]) }}
+                        </p>
+                        <a href="{{ $product['url'] }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-sm mt-auto w-100"
+                            style="border: 1px solid var(--orelia-gold); color: var(--orelia-gold); background: transparent; font-family: 'Lato', sans-serif; font-size: 0.8rem; border-radius: 1px;">
+                            {{ __('home.guest_view_product') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <p class="text-center text-muted mb-0" style="font-family: 'Lato', sans-serif; font-size: 0.875rem;">
+            {{ __('home.guest_products_unavailable') }}
+        </p>
+        @endif
+    </div>
+</section>
+@endif
+
 {{-- Value Props --}}
 <section class="container mb-5">
     <div class="row g-4 text-center">
