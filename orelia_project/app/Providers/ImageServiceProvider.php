@@ -15,7 +15,7 @@ class ImageServiceProvider extends ServiceProvider
             $driver = config('services.image_storage.driver', 'local');
 
             return match ($driver) {
-                'gcp'   => new ImageGCPStorage,
+                'gcp' => new ImageGCPStorage,
                 default => new ImageLocalStorage,
             };
         });

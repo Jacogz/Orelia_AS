@@ -69,8 +69,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="piece_image" class="form-label">{{ __('pieces.image_url') }}</label>
-                        <img src="{{ $viewData['piece']->getImageUrl() }}" alt="{{ $viewData['piece']->getName() }}"
-                             class="d-block mb-2 rounded" style="height: 80px; object-fit: cover;">
+                        @if($viewData['piece']->getImageUrl() !== \App\Models\Piece::DEFAULT_IMAGE)
+                            <img src="{{ $viewData['piece']->getImageUrl() }}" alt="{{ $viewData['piece']->getName() }}"
+                                 class="d-block mb-2 rounded" style="height: 80px; object-fit: cover;">
+                        @endif
                         <input type="file"
                                class="form-control @error('piece_image') is-invalid @enderror"
                                id="piece_image" name="piece_image" />
@@ -106,4 +108,27 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="collec
+                        <label for="collection_id" class="form-label">{{ __('pieces.collection') }}</label>
+                        <select class="form-select @error('collection_id') is-invalid @enderror"
+                                id="collection_id" name="collection_id" required>
+                            <option value="">{{ __('pieces.select_collection') }}</option>
+                            @foreach($viewData['collections'] as $collection)
+                                <option value="{{ $collection->getId() }}" {{ old('collection_id', $viewData['piece']->getCollectionId()) == $collection->getId() ? 'selected' : '' }}>
+                                    {{ $collection->getName() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('collection_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-dark">{{ __('pieces.save') }}</button>
+                        <a href="{{ route('admin.pieces.index') }}" class="btn btn-outline-secondary">{{ __('pieces.cancel') }}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
