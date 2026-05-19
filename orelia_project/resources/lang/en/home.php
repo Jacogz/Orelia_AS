@@ -17,4 +17,9 @@ return [
     'value_shipping_text' => 'Luxury packaging and real-time tracking.',
     'value_handmade_title' => 'Handmade',
     'value_handmade_text' => 'Each piece is unique, crafted by expert artisans.',
+    'guest_products_title' => 'From our partner store',
+    'guest_products_subtitle' => 'A curated selection of in-stock products from Tienda Elite Sport.',
+    'guest_products_unavailable' => 'Partner products are currently unavailable. Please check back later.',
+    'guest_stock' => ':count in stock',
+    'guest_view_product' => 'View product',
 ];

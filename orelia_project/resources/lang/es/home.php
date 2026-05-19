@@ -17,4 +17,9 @@ return [
     'value_shipping_text' => 'Empaque de lujo y seguimiento en tiempo real.',
     'value_handmade_title' => 'Hecho a mano',
     'value_handmade_text' => 'Cada pieza es única, elaborada por artesanos expertos.',
+    'guest_products_title' => 'De nuestra tienda aliada',
+    'guest_products_subtitle' => 'Una selección de productos en stock de Tienda Elite Sport.',
+    'guest_products_unavailable' => 'Los productos de la tienda aliada no están disponibles por el momento. Vuelve más tarde.',
+    'guest_stock' => ':count en stock',
+    'guest_view_product' => 'Ver producto',
 ];
