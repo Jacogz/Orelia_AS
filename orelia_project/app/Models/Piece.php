@@ -2,40 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
-
-use App\Models\Piece;
-use App\Models\Collection;
-use App\Models\Material;
-use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Piece extends Model
 {
     use HasFactory;
+
+    public const DEFAULT_IMAGE = 'https://via.placeholder.com/400x400?text=No+Image';
+
     /**
      * PIECE ATTRIBUTES
      * $this->attributes['id'] - int - contains the piece primary key
      * $this->attributes['name'] - string - contains the piece name
      * $this->attributes['description'] - string - contains the piece description
-     * $this->attributes['price'] - int - contains the piece price
+     * $this->attributes['price'] - float - contains the piece price
      * $this->attributes['type'] - string - contains the piece type
      * $this->attributes['image_url'] - string - contains the piece image URL
      * $this->attributes['stock'] - int - contains the piece stock
      * $this->attributes['size'] - string - contains the piece size
-     * $this->attributes['weight'] - int - contains the piece weight
-     * $this->attributes['collection'] - Collection - contains the piece collection object (fk collection_id)
-     * $this->attributes['materials'] - Material[] - contains the piece materials list
-     * $this->attributes['order_items'] - OrderItem[] - contains the piece order items list
+     * $this->attributes['weight'] - float - contains the piece weight
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
+     * $this->attributes['collection_id'] - int - contains the piece collection foreign key
+     * $this->collection - Collection - contains the piece collection object
+     * $this->materials - Material[] - contains the piece materials list
+     * $this->orderItems - OrderItem[] - contains the piece order items list
      */
-
     protected $fillable = [
         'name',
         'description',
@@ -45,32 +42,128 @@ class Piece extends Model
         'stock',
         'size',
         'weight',
-        'collection_id'
+        'collection_id',
     ];
 
-    public static function validate(Request $request): array
+    // Getters & setters
+
+    public function getId(): int
     {
-        return $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'type' => 'required|string|max:255',
-            'image_url' => 'nullable|url',
-            'stock' => 'required|integer|min:0',
-            'size' => 'nullable|string|max:255',
-            'weight' => 'nullable|numeric|min:0',
-            'collection_id' => 'required|integer|exists:collections,id',
-        ]);
+        return $this->attributes['id'];
     }
-    
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->attributes['price'];
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->attributes['price'] = $price;
+    }
+
+    public function getType(): string
+    {
+        return $this->attributes['type'];
+    }
+
+    public function setType(string $type): void
+    {
+        $this->attributes['type'] = $type;
+    }
+
+    public function getImageUrl(): string
+    {
+        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
+    }
+
+    public function setImageUrl(?string $imageUrl): void
+    {
+        $this->attributes['image_url'] = $imageUrl;
+    }
+
+    public function getStock(): int
+    {
+        return $this->attributes['stock'];
+    }
+
+    public function setStock(int $stock): void
+    {
+        $this->attributes['stock'] = $stock;
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->attributes['size'];
+    }
+
+    public function setSize(?string $size): void
+    {
+        $this->attributes['size'] = $size;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->attributes['weight'];
+    }
+
+    public function setWeight(?float $weight): void
+    {
+        $this->attributes['weight'] = $weight;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
+    // FK getters & setters
+
+    public function getCollectionId(): int
+    {
+        return $this->attributes['collection_id'];
+    }
+
+    public function setCollectionId(int $collectionId): void
+    {
+        $this->attributes['collection_id'] = $collectionId;
+    }
+
+    // Relations
+
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class, 'collection_id');
     }
 
-    public function materials(): HasMany
+    public function materials(): BelongsToMany
     {
-        return $this->hasMany(Material::class);
+        return $this->belongsToMany(Material::class, 'piece_material');
     }
 
     public function orderItems(): HasMany
@@ -78,20 +171,26 @@ class Piece extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Getters for related models
+    // Relation getters
 
     public function getCollection(): Collection
     {
-        return $this->collection;
+        return $this->relationLoaded('collection')
+            ? $this->relations['collection']
+            : $this->collection()->first();
     }
 
     public function getMaterials(): EloquentCollection
     {
-        return $this->materials;
+        return $this->relationLoaded('materials')
+            ? $this->relations['materials']
+            : $this->materials()->get();
     }
 
     public function getOrderItems(): EloquentCollection
     {
-        return $this->orderItems;
+        return $this->relationLoaded('orderItems')
+            ? $this->relations['orderItems']
+            : $this->orderItems()->get();
     }
 }

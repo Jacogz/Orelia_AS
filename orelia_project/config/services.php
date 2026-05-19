@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'image_storage' => [
+        'driver' => env('IMAGE_STORAGE_DRIVER', 'local'),
+    ],
+
 ];

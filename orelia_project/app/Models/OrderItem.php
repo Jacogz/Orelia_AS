@@ -2,44 +2,80 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-
-use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
+    use HasFactory;
+
     /**
      * ORDER ITEM ATTRIBUTES
      * $this->attributes['id'] - int - contains the order item primary key
      * $this->attributes['unit_price'] - int - contains the order item unit price
      * $this->attributes['quantity'] - int - contains the order item quantity
-     * $this->attributes['subtotal'] - int - contains the order item total price
-     * $this->attributes['order'] - Order - contains the order item order object (fk order_id)
-     * $this->attributes['piece'] - Piece - contains the order item piece object (fk piece_id)
+     * $this->attributes['subtotal'] - int - contains the order item subtotal
      * $this->attributes['created_at'] - datetime - contains the creation date
      * $this->attributes['updated_at'] - datetime - contains the update date
+     * $this->attributes['order_id'] - int - contains the order item order foreign key
+     * $this->attributes['piece_id'] - int - contains the order item piece foreign key
+     * $this->order - Order - contains the order item order object
+     * $this->piece - Piece - contains the order item piece object
      */
-
     protected $fillable = [
         'unit_price',
         'quantity',
         'subtotal',
         'order_id',
-        'piece_id'
+        'piece_id',
     ];
 
-    public static function validate(Request $request): array
+    // Getters and setters
+
+    public function getId(): int
     {
-        return $request->validate([
-            'unit_price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
-            'subtotal' => 'required|numeric|min:0',
-            'order_id' => 'required|integer|exists:orders,id',
-            'piece_id' => 'required|integer|exists:pieces,id',
-        ]);
+        return $this->attributes['id'];
     }
+
+    public function getUnitPrice(): int
+    {
+        return $this->attributes['unit_price'];
+    }
+
+    public function setUnitPrice(int $unitPrice): void
+    {
+        $this->attributes['unit_price'] = $unitPrice;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->attributes['quantity'];
+    }
+
+    public function setQuantity(int $quantity): void
+    {
+        $this->attributes['quantity'] = $quantity;
+    }
+
+    public function getSubtotal(): int
+    {
+        return $this->attributes['subtotal'];
+    }
+
+    public function setSubtotal(int $subtotal): void
+    {
+        $this->attributes['subtotal'] = $subtotal;
+    }
+
+    // Model methods
+
+    public function calculateSubtotal(): int
+    {
+        return $this->getUnitPrice() * $this->getQuantity();
+    }
+
+    // Relationships
 
     public function order(): BelongsTo
     {
@@ -51,11 +87,13 @@ class OrderItem extends Model
         return $this->belongsTo(Piece::class, 'piece_id');
     }
 
-    // Getters for related models
+    // Relationship getters
+
     public function getOrder(): Order
     {
         return $this->order;
     }
+
     public function getPiece(): Piece
     {
         return $this->piece;
