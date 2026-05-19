@@ -19,7 +19,7 @@
                         </ul>
                     </div>
                 @endif
-                <form action="{{ route('admin.pieces.store') }}" method="POST">
+                <form action="{{ route('admin.pieces.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">{{ __('pieces.name') }}</label>
@@ -67,11 +67,11 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="image_url" class="form-label">{{ __('pieces.image_url') }}</label>
-                        <input type="url"
-                               class="form-control @error('image_url') is-invalid @enderror"
-                               id="image_url" name="image_url" value="{{ old('image_url') }}" />
-                        @error('image_url')
+                        <label for="piece_image" class="form-label">{{ __('pieces.image_url') }}</label>
+                        <input type="file"
+                               class="form-control @error('piece_image') is-invalid @enderror"
+                               id="piece_image" name="piece_image" />
+                        @error('piece_image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

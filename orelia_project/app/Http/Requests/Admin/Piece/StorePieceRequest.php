@@ -18,7 +18,7 @@ class StorePieceRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'type' => 'required|string|max:255',
-            'image_url' => 'nullable|url',
+            'piece_image' => 'nullable|image',
             'stock' => 'required|integer|min:0',
             'size' => 'nullable|string|max:255',
             'weight' => 'nullable|numeric|min:0',

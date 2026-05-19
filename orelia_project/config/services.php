@@ -40,4 +40,8 @@ return [
         'base_currency' => env('EXCHANGERATE_BASE_CURRENCY', 'COP'),
     ],
 
+    'image_storage' => [
+        'driver' => env('IMAGE_STORAGE_DRIVER', 'local'),
+    ],
+
 ];

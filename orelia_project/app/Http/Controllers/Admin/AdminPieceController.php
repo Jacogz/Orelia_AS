@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Piece\StorePieceRequest;
 use App\Http\Requests\Admin\Piece\UpdatePieceRequest;
+use App\Interfaces\ImageStorage;
 use App\Models\Collection;
 use App\Models\Piece;
 use Illuminate\Database\QueryException;
@@ -68,7 +69,13 @@ class AdminPieceController extends Controller
 
     public function store(StorePieceRequest $request): RedirectResponse
     {
+        $storeInterface = app(ImageStorage::class);
+        $storeInterface->store($request);
+
         $validationData = $request->validated();
+        if ($request->hasFile('piece_image')) {
+            $validationData['image_url'] = 'pieces/'.$request->file('piece_image')->hashName();
+        }
 
         $piece = new Piece;
         $piece->fill($validationData);
@@ -93,7 +100,13 @@ class AdminPieceController extends Controller
 
     public function update(UpdatePieceRequest $request, string $id): RedirectResponse
     {
+        $storeInterface = app(ImageStorage::class);
+        $storeInterface->store($request);
+
         $validationData = $request->validated();
+        if ($request->hasFile('piece_image')) {
+            $validationData['image_url'] = 'pieces/'.$request->file('piece_image')->hashName();
+        }
 
         $piece = Piece::findOrFail($id);
         $piece->fill($validationData);
