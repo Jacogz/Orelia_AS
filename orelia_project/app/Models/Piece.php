@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Piece extends Model
 {
@@ -94,7 +95,17 @@ class Piece extends Model
 
     public function getImageUrl(): string
     {
-        return $this->attributes['image_url'] ?? self::DEFAULT_IMAGE;
+        $path = $this->attributes['image_url'] ?? null;
+
+        if (empty($path)) {
+            return self::DEFAULT_IMAGE;
+        }
+
+        if (str_starts_with($path, 'http')) {
+            return $path;
+        }
+
+        return Storage::disk('public')->url($path);
     }
 
     public function setImageUrl(?string $imageUrl): void
