@@ -114,7 +114,7 @@ class CartController extends Controller
             $piecesMap = $pieces->keyBy('id');
             $order = new Order;
             $order->fill([
-                'client_id' => $user->getId(),
+                'user_id' => $user->getId(),
                 'total' => 0,
                 'status' => 'pending',
                 'payment_method' => 'pending',
