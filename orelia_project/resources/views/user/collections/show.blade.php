@@ -26,9 +26,15 @@
     <div class="row row-cols-2 row-cols-md-4 g-4">
         @foreach($viewData['pieces'] as $piece)
             <div class="col orelia-card">
-                <div class="position-relative overflow-hidden" style="background:#f7f7f5">
-                    <img src="{{ $piece->getImageUrl() }}" alt="{{ $piece->getName() }}"
-                        class="w-100" style="aspect-ratio:1/1; object-fit:cover; display:block">
+                <div class="position-relative overflow-hidden d-flex align-items-center justify-content-center" style="background:#f7f7f5; aspect-ratio:1/1;">
+                    <img src="{{ $piece->getImageUrl() }}"
+                        alt="{{ $piece->getName() }}"
+                        class="w-100 h-100"
+                        style="object-fit:cover; display:block; position:absolute; top:0; left:0;"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; background:#f7f7f5;">
+                        <i class="bi bi-gem" style="font-size: 2.5rem; color: var(--orelia-gold-light);"></i>
+                    </div>
                     <div class="position-absolute bottom-0 start-0 end-0 p-3 orelia-overlay">
                         @if($piece->getStock() > 0)
                             <form action="{{ route('cart.add', $piece->getId()) }}" method="POST">
