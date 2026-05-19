@@ -66,12 +66,27 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    @if($viewData['imageDriver'] !== 'url')
                     <div class="mb-3">
                         <label for="piece_image" class="form-label">{{ __('pieces.image_url') }}</label>
                         <input type="file"
                                class="form-control @error('piece_image') is-invalid @enderror"
                                id="piece_image" name="piece_image" />
                         @error('piece_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    @endif
+                    <div class="mb-3">
+                        <label for="piece_web_url" class="form-label">
+                            {{ $viewData['imageDriver'] === 'url' ? __('pieces.image_url') : __('pieces.web_url') }}
+                        </label>
+                        <input type="url"
+                               class="form-control @error('piece_web_url') is-invalid @enderror"
+                               id="piece_web_url" name="piece_web_url"
+                               value="{{ old('piece_web_url') }}"
+                               placeholder="https://..." />
+                        @error('piece_web_url')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

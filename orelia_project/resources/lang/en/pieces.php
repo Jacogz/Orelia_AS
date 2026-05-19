@@ -12,6 +12,7 @@ return [
     'price' => 'Price',
     'type' => 'Type',
     'image_url' => 'Image URL',
+    'web_url' => 'Image from web URL',
     'stock' => 'Stock',
     'size' => 'Size',
     'weight' => 'Weight',

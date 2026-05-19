@@ -8,13 +8,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageLocalStorage implements ImageStorage
 {
-    public function store(Request $request): void
+    public function store(Request $request): ?string
     {
         if ($request->hasFile('piece_image')) {
+            $file = $request->file('piece_image');
             Storage::disk('public')->put(
-                'pieces/'.$request->file('piece_image')->hashName(),
-                file_get_contents($request->file('piece_image')->getRealPath())
+                'pieces/'.$file->hashName(),
+                file_get_contents($file->getRealPath())
             );
+
+            return 'pieces/'.$file->hashName();
         }
+
+        $url = $request->input('piece_web_url');
+
+        return blank($url) ? null : $url;
     }
 }

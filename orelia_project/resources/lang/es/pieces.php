@@ -12,6 +12,7 @@ return [
     'price' => 'Precio',
     'type' => 'Tipo',
     'image_url' => 'URL de imagen',
+    'web_url' => 'Imagen desde URL web',
     'stock' => 'Inventario',
     'size' => 'Tamaño',
     'weight' => 'Peso',
