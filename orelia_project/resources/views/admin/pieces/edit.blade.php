@@ -19,7 +19,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('admin.pieces.update', $viewData['piece']->getId()) }}" method="POST">
+                    <form action="{{ route('admin.pieces.update', $viewData['piece']->getId()) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
@@ -39,8 +39,10 @@
                             <input type="text" class="form-control" id="type" name="type" value="{{ old('type', $viewData['piece']->getType()) }}" required />
                         </div>
                         <div class="mb-3">
-                            <label for="image_url" class="form-label">{{ __('pieces.image_url') }}</label>
-                            <input type="url" class="form-control" id="image_url" name="image_url" value="{{ old('image_url', $viewData['piece']->getImageUrl()) }}" />
+                            <label for="piece_image" class="form-label">{{ __('pieces.image_url') }}</label>
+                            <img src="{{ $viewData['piece']->getImageUrl() }}" alt="{{ $viewData['piece']->getName() }}"
+                                 class="d-block mb-2 rounded" style="height: 80px; object-fit: cover;">
+                            <input type="file" class="form-control" id="piece_image" name="piece_image" />
                         </div>
                         <div class="mb-3">
                             <label for="stock" class="form-label">{{ __('pieces.stock') }}</label>
