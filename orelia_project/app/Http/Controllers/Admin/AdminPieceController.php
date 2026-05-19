@@ -63,6 +63,7 @@ class AdminPieceController extends Controller
         $viewData = [];
         $viewData['title'] = __('pieces.create_title');
         $viewData['collections'] = $collections;
+        $viewData['imageDriver'] = config('services.image_storage.driver', 'local');
 
         return view('admin.pieces.create')->with('viewData', $viewData);
     }
@@ -70,11 +71,11 @@ class AdminPieceController extends Controller
     public function store(StorePieceRequest $request): RedirectResponse
     {
         $storeInterface = app(ImageStorage::class);
-        $storeInterface->store($request);
+        $imageUrl = $storeInterface->store($request);
 
         $validationData = $request->validated();
-        if ($request->hasFile('piece_image')) {
-            $validationData['image_url'] = 'pieces/'.$request->file('piece_image')->hashName();
+        if ($imageUrl !== null) {
+            $validationData['image_url'] = $imageUrl;
         }
 
         $piece = new Piece;
@@ -94,6 +95,7 @@ class AdminPieceController extends Controller
         $viewData['title'] = __('pieces.edit_title');
         $viewData['piece'] = $piece;
         $viewData['collections'] = $collections;
+        $viewData['imageDriver'] = config('services.image_storage.driver', 'local');
 
         return view('admin.pieces.edit')->with('viewData', $viewData);
     }
@@ -101,11 +103,11 @@ class AdminPieceController extends Controller
     public function update(UpdatePieceRequest $request, string $id): RedirectResponse
     {
         $storeInterface = app(ImageStorage::class);
-        $storeInterface->store($request);
+        $imageUrl = $storeInterface->store($request);
 
         $validationData = $request->validated();
-        if ($request->hasFile('piece_image')) {
-            $validationData['image_url'] = 'pieces/'.$request->file('piece_image')->hashName();
+        if ($imageUrl !== null) {
+            $validationData['image_url'] = $imageUrl;
         }
 
         $piece = Piece::findOrFail($id);

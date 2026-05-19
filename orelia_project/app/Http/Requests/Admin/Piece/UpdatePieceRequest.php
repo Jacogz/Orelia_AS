@@ -19,6 +19,7 @@ class UpdatePieceRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'type' => 'required|string|max:255',
             'piece_image' => 'nullable|image',
+            'piece_web_url' => 'nullable|url|max:2048',
             'stock' => 'required|integer|min:0',
             'size' => 'nullable|string|max:255',
             'weight' => 'nullable|numeric|min:0',
