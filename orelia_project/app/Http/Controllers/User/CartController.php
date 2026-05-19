@@ -9,6 +9,7 @@ use App\Http\Requests\Cart\UpdateCartItemRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Piece;
+use App\Services\ExchangeRateService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,11 +18,17 @@ use Illuminate\View\View;
 
 class CartController extends Controller
 {
+    private ExchangeRateService $exchangeRateService;
+
+    public function __construct(ExchangeRateService $exchangeRateService)
+    {
+        $this->exchangeRateService = $exchangeRateService;
+    }
+
     public function index(Request $request): View
     {
         $cartItems = [];
         $total = 0;
-
         $cartData = $request->session()->get('cart', []);
 
         if ($cartData) {
@@ -33,11 +40,13 @@ class CartController extends Controller
                 if (isset($piecesMap[$pieceId])) {
                     $piece = $piecesMap[$pieceId];
                     $subtotal = $piece->getPrice() * $quantity;
+
                     $cartItems[$pieceId] = [
                         'piece' => $piece,
                         'quantity' => $quantity,
                         'subtotal' => $subtotal,
                     ];
+
                     $total += $subtotal;
                 }
             }
@@ -48,6 +57,7 @@ class CartController extends Controller
         $viewData['subtitle'] = __('cart.subtitle');
         $viewData['cartItems'] = $cartItems;
         $viewData['total'] = $total;
+        $viewData['rates'] = $this->exchangeRateService->getRates();
 
         return view('user.cart.index')->with('viewData', $viewData);
     }
@@ -56,7 +66,6 @@ class CartController extends Controller
     {
         $validationData = $request->validated();
         $pieceId = $validationData['piece_id'];
-
         $cart = $request->session()->get('cart', []);
 
         if (isset($cart[$pieceId])) {
@@ -112,6 +121,7 @@ class CartController extends Controller
             $pieceIds = array_keys($cartData);
             $pieces = Piece::whereIn('id', $pieceIds)->get();
             $piecesMap = $pieces->keyBy('id');
+
             $order = new Order;
             $order->fill([
                 'user_id' => $user->getId(),

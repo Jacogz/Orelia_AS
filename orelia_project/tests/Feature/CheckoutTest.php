@@ -18,12 +18,12 @@ class CheckoutTest extends TestCase
     {
         $user = new User;
         $user->fill([
-            'name'      => 'Test',
+            'name' => 'Test',
             'last_name' => 'User',
-            'email'     => 'test@test.com',
-            'password'  => bcrypt('password'),
-            'address'   => '123 St',
-            'role'      => 'client',
+            'email' => 'test@test.com',
+            'password' => bcrypt('password'),
+            'address' => '123 St',
+            'role' => 'client',
         ]);
         $user->save();
 
@@ -38,10 +38,10 @@ class CheckoutTest extends TestCase
 
         $piece = new Piece;
         $piece->fill([
-            'name'          => 'Test Ring',
-            'price'         => 100000,
-            'type'          => 'ring',
-            'stock'         => 10,
+            'name' => 'Test Ring',
+            'price' => 100000,
+            'type' => 'ring',
+            'stock' => 10,
             'collection_id' => $collection->getId(),
         ]);
         $piece->save();
