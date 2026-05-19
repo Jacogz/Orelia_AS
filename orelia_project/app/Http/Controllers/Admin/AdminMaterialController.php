@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\MaterialFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Material\StoreMaterialRequest;
 use App\Http\Requests\Admin\Material\UpdateMaterialRequest;
@@ -13,21 +14,17 @@ use Illuminate\View\View;
 
 class AdminMaterialController extends Controller
 {
+    private MaterialFilter $materialFilter;
+
+    public function __construct(MaterialFilter $materialFilter)
+    {
+        $this->materialFilter = $materialFilter;
+    }
+
     public function index(Request $request): View
     {
         $query = Material::query();
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
-        }
-
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        if ($request->filled('color')) {
-            $query->where('color', 'like', '%'.$request->color.'%');
-        }
+        $this->materialFilter->apply($query, $request);
 
         $materials = $query->get();
         $types = Material::select('type')->distinct()->pluck('type');

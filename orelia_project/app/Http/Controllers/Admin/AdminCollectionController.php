@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\CollectionFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Collection\StoreCollectionRequest;
 use App\Http\Requests\Admin\Collection\UpdateCollectionRequest;
@@ -13,17 +14,17 @@ use Illuminate\View\View;
 
 class AdminCollectionController extends Controller
 {
+    private CollectionFilter $collectionFilter;
+
+    public function __construct(CollectionFilter $collectionFilter)
+    {
+        $this->collectionFilter = $collectionFilter;
+    }
+
     public function index(Request $request): View
     {
         $query = Collection::query();
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
-        }
-
-        if ($request->filled('description')) {
-            $query->where('description', 'like', '%'.$request->description.'%');
-        }
+        $this->collectionFilter->apply($query, $request);
 
         $collections = $query->get();
 

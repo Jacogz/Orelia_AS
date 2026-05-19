@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Filters\CollectionFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Services\ExchangeRateService;
@@ -12,18 +13,20 @@ class CollectionController extends Controller
 {
     private ExchangeRateService $exchangeRateService;
 
-    public function __construct(ExchangeRateService $exchangeRateService)
-    {
+    private CollectionFilter $collectionFilter;
+
+    public function __construct(
+        ExchangeRateService $exchangeRateService,
+        CollectionFilter $collectionFilter
+    ) {
         $this->exchangeRateService = $exchangeRateService;
+        $this->collectionFilter = $collectionFilter;
     }
 
     public function index(Request $request): View
     {
         $query = Collection::query();
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
-        }
+        $this->collectionFilter->apply($query, $request);
 
         $viewData = [];
         $viewData['title'] = __('collections.title');
